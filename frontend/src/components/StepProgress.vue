@@ -31,7 +31,9 @@ const getStepStatus = (stepId) => {
 
 const canNavigate = (stepId) => {
   // 只能导航到当前步骤或之前的步骤
-  return stepId <= store.currentStep
+  // return stepId <= store.currentStep
+  // 只能导航到已完成的步骤
+   return stepId < currentStepId.value
 }
 
 const navigateToStep = (step) => {
