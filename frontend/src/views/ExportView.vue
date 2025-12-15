@@ -221,14 +221,6 @@ const downloadReport = async () => {
   }
 }
 
-// 返回
-const goBack = () => {
-  if (store.selectedTemplate?.includeOrtho || store.selectedTemplate?.include3D) {
-    router.push('/advanced')
-  } else {
-    router.push('/review')
-  }
-}
 
 // 新建项目
 const newProject = () => {
@@ -774,22 +766,15 @@ const newProject = () => {
       </div>
       
       <!-- 操作按钮 -->
-      <div class="flex items-center justify-between mt-6">
-        <button @click="goBack" class="btn-secondary">
-          <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-          </svg>
-          返回上一步
-        </button>
-        
-        <button 
+      <div class="flex justify-end mt-6">
+        <button
           @click="generateReport"
           :disabled="!projectInfo.name || !projectInfo.area"
           class="btn-primary"
         >
           生成报告
           <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         </button>

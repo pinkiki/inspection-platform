@@ -319,10 +319,6 @@ const goNext = () => {
   router.push('/export')
 }
 
-// 返回
-const goBack = () => {
-  router.push('/review')
-}
 
 // 处理基础报告下载 - 跳转到导出页面
 const handleDownloadBasic = () => {
@@ -586,14 +582,7 @@ const getStatusColor = (status) => {
       </div>
       
       <!-- 操作按钮 -->
-      <div class="flex items-center justify-between">
-        <button @click="goBack" class="btn-secondary">
-          <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-          </svg>
-          返回识别审查
-        </button>
-        
+      <div class="flex justify-end">
         <button @click="goNext" class="btn-primary">
           导出报告
           <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">

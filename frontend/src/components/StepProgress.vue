@@ -36,7 +36,7 @@ const canNavigate = (stepId) => {
 
 const navigateToStep = (step) => {
   if (!canNavigate(step.id)) return
-  
+
   // 特殊处理：从导出步骤（步骤6）返回到关键步骤（1-3）
   if (currentStepId.value === 6 && step.id <= 3) {
     // 返回到上传、场景分析、报告模板需要确认
@@ -44,23 +44,23 @@ const navigateToStep = (step) => {
     showRestartWarning.value = true
     return
   }
-  
+
   // 特殊处理：从后续步骤返回场景分析
   if (step.id === 2 && currentStepId.value > 2 && currentStepId.value < 6 && store.analysisResult) {
     // 已经有场景分析结果，且是从后续步骤返回，需要确认
     showReanalysisConfirm.value = true
     return
   }
-  
+
   // 直接导航
   router.push(step.path)
 }
 
-// 确认返回场景分析
+// 确认返回���景分析
 const confirmBackToAnalysis = () => {
   // 扣除积分
   const success = store.deductCredits(CREDIT_PRICES.SCENE_REANALYSIS, '返回重新选择场景')
-  
+
   if (success) {
     // 清除相关数据
     store.resetDataLoadedFlag('detection')
@@ -69,7 +69,7 @@ const confirmBackToAnalysis = () => {
     store.setAnalysisResult(null)
     store.setAdvancedProcessed(false)
     store.setPaidTemplateCredits(0)
-    
+
     showReanalysisConfirm.value = false
     router.push('/analysis')
   }
@@ -80,10 +80,10 @@ const cancelBackToAnalysis = () => {
   showReanalysisConfirm.value = false
 }
 
-// 确认重启项目
+// 确认重启
 const confirmRestart = () => {
   if (!pendingNavigation.value) return
-  
+
   // 清除所有处理结果
   store.resetDataLoadedFlag()
   store.setDetectionResults([])
@@ -91,7 +91,7 @@ const confirmRestart = () => {
   store.setAdvancedProcessed(false)
   store.setPaidTemplateCredits(0)
   store.resetProcessingProgress()
-  
+
   // 根据返回的步骤清除相应数据
   if (pendingNavigation.value.id <= 2) {
     // 返回到上传或场景分析，清除分析结果
@@ -101,7 +101,7 @@ const confirmRestart = () => {
     // 返回到模板选择，清除模板选择
     store.setSelectedTemplate(null)
   }
-  
+
   showRestartWarning.value = false
   router.push(pendingNavigation.value.path)
   pendingNavigation.value = null
@@ -112,6 +112,8 @@ const cancelRestart = () => {
   showRestartWarning.value = false
   pendingNavigation.value = null
 }
+
+
 </script>
 
 <template>
@@ -169,7 +171,7 @@ const cancelRestart = () => {
         </div>
       </div>
     </div>
-    
+
     <!-- 返回场景分析确认对话框 -->
     <ConfirmDialog
       :show="showReanalysisConfirm"
@@ -183,7 +185,7 @@ const cancelRestart = () => {
       @cancel="cancelBackToAnalysis"
       @close="cancelBackToAnalysis"
     />
-    
+
     <!-- 重启项目警告对话框 -->
     <ConfirmDialog
       :show="showRestartWarning"
@@ -214,9 +216,6 @@ const cancelRestart = () => {
   transition: all 0.18s ease;
 }
 
-.step-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
 
 .step-name {
   font-size: 13px;

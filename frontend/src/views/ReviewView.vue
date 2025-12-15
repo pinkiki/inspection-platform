@@ -8,7 +8,6 @@ import ConfirmDialog from '../components/ConfirmDialog.vue'
 
 const router = useRouter()
 const store = useProjectStore()
-const showReanalysisConfirm = ref(false)
 
 const isDetecting = ref(true)
 const detectProgress = ref(0)
@@ -302,39 +301,6 @@ const goNext = () => {
   }
 }
 
-// 返回模板选择
-const goBackToTemplate = () => {
-  router.push('/template')
-}
-
-// 返回场景分析 - 显示确认对话框
-const goBackToAnalysis = () => {
-  showReanalysisConfirm.value = true
-}
-
-// 确认返回场景分析
-const confirmBackToAnalysis = () => {
-  // 扣除积分
-  const success = store.deductCredits(CREDIT_PRICES.SCENE_REANALYSIS, '返回重新选择场景')
-  
-  if (success) {
-    // 清除识别结果和进阶处理状态
-    store.resetDataLoadedFlag('detection')
-    store.resetDataLoadedFlag('analysis')
-    store.setDetectionResults([])
-    store.setAnalysisResult(null)
-    store.setAdvancedProcessed(false)
-    store.setPaidTemplateCredits(0)
-    
-    showReanalysisConfirm.value = false
-    router.push('/analysis')
-  }
-}
-
-// 取消返回场景分析
-const cancelBackToAnalysis = () => {
-  showReanalysisConfirm.value = false
-}
 
 // 获取状态颜色
 const getStatusColor = (status) => {
@@ -342,7 +308,7 @@ const getStatusColor = (status) => {
     case 'danger': return 'text-accent-danger'
     case 'warning': return 'text-accent-warning'
     case 'success': return 'text-accent-success'
-    default: return 'text-white/50'
+    default: return 'text-text-secondary'
   }
 }
 
@@ -518,20 +484,7 @@ const getStatusBg = (status) => {
       </div>
       
       <!-- 操作按钮 -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button @click="goBackToAnalysis" class="btn-secondary">
-            <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-            </svg>
-            返回场景分析
-          </button>
-          
-          <button @click="goBackToTemplate" class="btn-secondary">
-            返回模板选择
-          </button>
-        </div>
-        
+      <div class="flex justify-end">
         <button @click="goNext" class="btn-primary">
           {{ store.selectedTemplate?.includeOrtho || store.selectedTemplate?.include3D ? '生成进阶报告' : '导出报告' }}
           <svg class="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -541,20 +494,7 @@ const getStatusBg = (status) => {
       </div>
     </div>
     
-    <!-- 返回场景分析确认对话框 -->
-    <ConfirmDialog
-      :show="showReanalysisConfirm"
-      title="重新选择场景"
-      message="重新选择场景将消耗积分，之前的识别结果将被清除。&#10;&#10;是否确认返回场景分析？"
-      :credits-cost="CREDIT_PRICES.SCENE_REANALYSIS"
-      confirm-text="确认返回"
-      cancel-text="取消"
-      type="warning"
-      @confirm="confirmBackToAnalysis"
-      @cancel="cancelBackToAnalysis"
-      @close="cancelBackToAnalysis"
-    />
-    
+      
     <!-- 详情/编辑弹窗 -->
     <Teleport to="body">
       <div 

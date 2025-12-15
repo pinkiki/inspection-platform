@@ -279,9 +279,9 @@ const startAnalysis = async () => {
       </div>
     </div>
     
-    <!-- 下一步按钮 -->
+    <!-- 操作按钮 -->
     <div class="flex justify-end">
-      <button 
+      <button
         @click="startAnalysis"
         :disabled="uploadedFiles.length === 0 || isUploading"
         class="btn-primary"

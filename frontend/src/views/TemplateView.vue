@@ -182,10 +182,6 @@ const closeSupplementaryModal = () => {
   showSupplementaryModal.value = false
 }
 
-// 返回
-const goBack = () => {
-  router.push('/analysis')
-}
 </script>
 
 <template>
@@ -340,15 +336,8 @@ const goBack = () => {
     </div>
     
     <!-- 操作按钮 -->
-    <div class="flex items-center justify-between">
-      <button @click="goBack" class="btn-secondary">
-        <svg class="w-5 h-5 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-        </svg>
-        返回场景分析
-      </button>
-      
-      <button 
+    <div class="flex justify-end">
+      <button
         @click="goNext"
         :disabled="!selectedTemplateId"
         class="btn-primary"
