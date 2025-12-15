@@ -193,8 +193,8 @@ const goBack = () => {
     <!-- 标题和积分显示 -->
     <div class="flex items-start justify-between mb-8">
       <div class="text-center flex-1">
-        <h1 class="text-3xl font-bold text-white mb-2">选择报告模板</h1>
-        <p class="text-white/60">
+        <h1 class="text-3xl font-bold text-text-primary mb-2">选择报告模板</h1>
+        <p class="text-text-secondary">
           当前场景：<span class="text-brand-sky">{{ store.analysisResult?.sceneName || '未识别' }}</span>
           · 根据您的需求选择合适的报告类型
         </p>
@@ -231,7 +231,7 @@ const goBack = () => {
         <!-- 推荐标签 -->
         <div 
           v-if="template.recommended"
-          class="absolute -top-3 -right-3 px-3 py-1 bg-accent-warning text-white text-xs font-bold rounded-full"
+          class="absolute -top-3 -right-3 px-3 py-1 bg-accent-warning text-text-primary text-xs font-bold rounded-full"
         >
           推荐
         </div>
@@ -249,8 +249,8 @@ const goBack = () => {
         <div class="flex items-start gap-4 mb-4">
           <div class="text-4xl">{{ template.icon }}</div>
           <div class="flex-1">
-            <h3 class="text-xl font-semibold text-white mb-1">{{ template.name }}</h3>
-            <p class="text-white/50 text-sm">{{ template.description }}</p>
+            <h3 class="text-xl font-semibold text-text-primary mb-1">{{ template.name }}</h3>
+            <p class="text-text-secondary text-sm">{{ template.description }}</p>
           </div>
         </div>
         
@@ -259,7 +259,7 @@ const goBack = () => {
           <div 
             v-for="feature in template.features"
             :key="feature"
-            class="flex items-center gap-2 text-sm text-white/70"
+            class="flex items-center gap-2 text-sm text-text-secondary"
           >
             <svg class="w-4 h-4 text-accent-success flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -269,8 +269,8 @@ const goBack = () => {
         </div>
         
         <!-- 积分和时间 -->
-        <div class="flex items-center justify-between pt-4 border-t border-white/10">
-          <div class="flex items-center gap-2 text-sm text-white/50">
+        <div class="flex items-center justify-between pt-4 border-t border-line-light">
+          <div class="flex items-center gap-2 text-sm text-text-secondary">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -288,7 +288,7 @@ const goBack = () => {
             >
               {{ template.credits === 0 ? '免费' : template.credits }}
             </span>
-            <span v-if="template.credits > 0" class="text-sm text-white/50">积分</span>
+            <span v-if="template.credits > 0" class="text-sm text-text-secondary">积分</span>
           </div>
         </div>
         
@@ -305,7 +305,7 @@ const goBack = () => {
         <!-- 预览按钮 -->
         <button 
           @click.stop="showPreview(template)"
-          class="mt-4 w-full py-2 text-center text-sm text-white/60 hover:text-white border border-white/10 rounded-lg hover:bg-white/5 transition-colors"
+          class="mt-4 w-full py-2 text-center text-sm text-text-secondary hover:text-text-primary border border-line-light rounded-lg hover:bg-base-elevated transition-colors"
         >
           查看模板预览
         </button>
@@ -318,8 +318,8 @@ const goBack = () => {
         <div class="flex items-center gap-4">
           <div class="text-3xl">{{ selectedTemplate.icon }}</div>
           <div>
-            <div class="text-white font-semibold">已选择：{{ selectedTemplate.name }}</div>
-            <div class="text-white/50 text-sm">
+            <div class="text-text-primary font-semibold">已选择：{{ selectedTemplate.name }}</div>
+            <div class="text-text-secondary text-sm">
               预计处理时间 {{ selectedTemplate.estimatedTime }}
               <span v-if="selectedTemplate.includeOrtho"> · 含正射影像</span>
               <span v-if="selectedTemplate.include3D"> · 含三维模型</span>
@@ -334,7 +334,7 @@ const goBack = () => {
           <div class="text-2xl font-bold font-mono" :class="selectedTemplate.credits === 0 ? 'text-accent-success' : 'text-brand-sky'">
             {{ selectedTemplate.credits === 0 ? '免费' : selectedTemplate.credits }}
           </div>
-          <span v-if="selectedTemplate.credits > 0" class="text-white/50">积分</span>
+          <span v-if="selectedTemplate.credits > 0" class="text-text-secondary">积分</span>
         </div>
       </div>
     </div>

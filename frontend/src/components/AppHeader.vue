@@ -56,7 +56,7 @@ const store = useProjectStore()
   top: 0;
   z-index: 50;
   border-bottom: 1px solid var(--line-light);
-  background: rgba(15,27,46,0.7);
+  background: rgba(255,255,255,0.9);
   backdrop-filter: blur(10px);
 }
 
@@ -64,8 +64,8 @@ const store = useProjectStore()
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(91,214,255,0.9), rgba(255,90,122,0.7));
-  box-shadow: 0 10px 22px rgba(91,214,255,0.12);
+  background: #102375;
+  box-shadow: 0 4px 12px rgba(16,35,117,0.15);
   display: grid;
   place-items: center;
 }
@@ -73,7 +73,7 @@ const store = useProjectStore()
 .logo-text {
   font-weight: 800;
   font-size: 14px;
-  color: #061021;
+  color: #ffffff;
 }
 
 .status-chip {
@@ -83,7 +83,7 @@ const store = useProjectStore()
   padding: 6px 12px;
   border-radius: 10px;
   border: 1px solid var(--line-light);
-  background: rgba(17,31,54,0.35);
+  background: rgba(245,245,245,0.6);
   font-size: 12px;
 }
 </style>

@@ -304,10 +304,10 @@ const handleClose = () => {
         <!-- 头部 -->
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="text-xl font-bold text-white">上传已有处理结果</h3>
-            <p class="text-white/50 text-sm mt-1">上传已有资料可以加速处理并节省费用</p>
+            <h3 class="text-xl font-bold text-text-primary">上传已有处理结果</h3>
+            <p class="text-text-secondary text-sm mt-1">上传已有资料可以加速处理并节省费用</p>
           </div>
-          <button @click="handleClose" class="text-white/50 hover:text-white transition-colors">
+          <button @click="handleClose" class="text-text-secondary hover:text-text-primary transition-colors">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -325,7 +325,7 @@ const handleClose = () => {
               class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all"
               :class="{
                 'bg-brand-primary text-white': currentStep >= step,
-                'bg-white/10 text-white/30': currentStep < step
+                'bg-base-elevated text-text-secondary': currentStep < step
               }"
             >
               {{ step }}
@@ -335,7 +335,7 @@ const handleClose = () => {
               class="w-12 h-0.5 mx-2 transition-all"
               :class="{
                 'bg-brand-primary': currentStep > step,
-                'bg-white/10': currentStep <= step
+                'bg-base-elevated': currentStep <= step
               }"
             ></div>
           </div>
@@ -343,8 +343,8 @@ const handleClose = () => {
         
         <!-- 步骤1: 选择数据来源 -->
         <div v-if="currentStep === 1" class="animate-fade-in">
-          <h4 class="text-lg font-semibold text-white mb-4">选择数据来源软件</h4>
-          <p class="text-white/50 text-sm mb-6">选择生成这些数据的软件，以便我们更好地解析格式</p>
+          <h4 class="text-lg font-semibold text-text-primary mb-4">选择数据来源软件</h4>
+          <p class="text-text-secondary text-sm mb-6">选择生成这些数据的软件，以便我们更好地解析格式</p>
           
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             <button
@@ -354,20 +354,20 @@ const handleClose = () => {
               class="p-4 rounded-xl border transition-all text-left"
               :class="{
                 'border-brand-primary bg-brand-primary/10': selectedSource === source.id,
-                'border-white/10 bg-white/5 hover:border-white/30': selectedSource !== source.id
+                'border-line-light bg-base-elevated hover:border-line-light': selectedSource !== source.id
               }"
             >
               <div class="text-2xl mb-2">{{ source.icon }}</div>
-              <div class="font-medium text-white">{{ source.name }}</div>
-              <div class="text-xs text-white/50">{{ source.description }}</div>
+              <div class="font-medium text-text-primary">{{ source.name }}</div>
+              <div class="text-xs text-text-secondary">{{ source.description }}</div>
             </button>
           </div>
         </div>
         
         <!-- 步骤2: 选择文件类型 -->
         <div v-if="currentStep === 2" class="animate-fade-in">
-          <h4 class="text-lg font-semibold text-white mb-4">选择要上传的数据类型</h4>
-          <p class="text-white/50 text-sm mb-6">选择您已有的处理结果，可多选</p>
+          <h4 class="text-lg font-semibold text-text-primary mb-4">选择要上传的数据类型</h4>
+          <p class="text-text-secondary text-sm mb-6">选择您已有的处理结果，可多选</p>
           
           <div class="space-y-3 mb-6">
             <button
@@ -377,13 +377,13 @@ const handleClose = () => {
               class="w-full p-4 rounded-xl border transition-all text-left flex items-start gap-4"
               :class="{
                 'border-brand-primary bg-brand-primary/10': selectedFileTypes.includes(type.id),
-                'border-white/10 bg-white/5 hover:border-white/30': !selectedFileTypes.includes(type.id)
+                'border-line-light bg-base-elevated hover:border-line-light': !selectedFileTypes.includes(type.id)
               }"
             >
               <div class="text-2xl">{{ type.icon }}</div>
               <div class="flex-1">
                 <div class="flex items-center justify-between">
-                  <span class="font-medium text-white">{{ type.name }}</span>
+                  <span class="font-medium text-text-primary">{{ type.name }}</span>
                   <div class="flex items-center gap-2">
                     <span class="text-xs text-accent-success">节省 {{ type.discount }}%</span>
                     <div 
@@ -399,7 +399,7 @@ const handleClose = () => {
                     </div>
                   </div>
                 </div>
-                <div class="text-sm text-white/50 mt-1">{{ type.description }}</div>
+                <div class="text-sm text-text-secondary mt-1">{{ type.description }}</div>
                 <div class="text-xs text-brand-sky mt-1">预计节省: {{ type.timeSaved }}</div>
               </div>
             </button>
@@ -412,7 +412,7 @@ const handleClose = () => {
                 <svg class="w-5 h-5 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="text-white text-sm">预计可节省积分</span>
+                <span class="text-text-primary text-sm">预计可节省积分</span>
               </div>
               <span class="text-accent-success font-bold text-lg">{{ estimatedSavings.discountPercent }}%</span>
             </div>
@@ -421,8 +421,8 @@ const handleClose = () => {
         
         <!-- 步骤3: 上传文件 -->
         <div v-if="currentStep === 3" class="animate-fade-in">
-          <h4 class="text-lg font-semibold text-white mb-4">上传文件</h4>
-          <p class="text-white/50 text-sm mb-6">为每种选中的数据类型选择对应文件</p>
+          <h4 class="text-lg font-semibold text-text-primary mb-4">上传文件</h4>
+          <p class="text-text-secondary text-sm mb-6">为每种选中的数据类型选择对应文件</p>
           
           <div class="space-y-4 mb-6">
             <div 
@@ -433,9 +433,9 @@ const handleClose = () => {
               <div class="flex items-center justify-between mb-3">
                 <div class="flex items-center gap-2">
                   <span class="text-xl">{{ fileTypes.find(t => t.id === typeId)?.icon }}</span>
-                  <span class="font-medium text-white">{{ fileTypes.find(t => t.id === typeId)?.name }}</span>
+                  <span class="font-medium text-text-primary">{{ fileTypes.find(t => t.id === typeId)?.name }}</span>
                 </div>
-                <span class="text-xs text-white/50">
+                <span class="text-xs text-text-secondary">
                   支持格式: {{ getAcceptFormats(typeId) || '通用格式' }}
                 </span>
               </div>
@@ -443,12 +443,12 @@ const handleClose = () => {
               <!-- 未选择文件 -->
               <div v-if="!selectedFiles[typeId]">
                 <label 
-                  class="flex items-center justify-center gap-2 p-6 border-2 border-dashed border-white/20 rounded-xl cursor-pointer hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all"
+                  class="flex items-center justify-center gap-2 p-6 border-2 border-dashed border-line-light rounded-xl cursor-pointer hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all"
                 >
-                  <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  <span class="text-white/50">点击选择文件或拖拽到此处</span>
+                  <span class="text-text-secondary">点击选择文件或拖拽到此处</span>
                   <input 
                     type="file"
                     class="hidden"
@@ -459,7 +459,7 @@ const handleClose = () => {
               </div>
               
               <!-- 已选择文件 -->
-              <div v-else class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+              <div v-else class="flex items-center justify-between p-4 bg-base-elevated rounded-xl">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 rounded-lg bg-brand-primary/20 flex items-center justify-center">
                     <svg class="w-5 h-5 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,15 +467,15 @@ const handleClose = () => {
                     </svg>
                   </div>
                   <div>
-                    <div class="text-white text-sm font-medium truncate max-w-xs">{{ selectedFiles[typeId].name }}</div>
-                    <div class="text-white/50 text-xs">{{ formatFileSize(selectedFiles[typeId].size) }}</div>
+                    <div class="text-text-primary text-sm font-medium truncate max-w-xs">{{ selectedFiles[typeId].name }}</div>
+                    <div class="text-text-secondary text-xs">{{ formatFileSize(selectedFiles[typeId].size) }}</div>
                   </div>
                 </div>
                 <button 
                   @click="removeFile(typeId)"
-                  class="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  class="p-2 hover:bg-base-elevated rounded-lg transition-colors"
                 >
-                  <svg class="w-5 h-5 text-white/50 hover:text-accent-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 text-text-secondary hover:text-accent-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
@@ -486,23 +486,23 @@ const handleClose = () => {
           <!-- 预计节省统计 -->
           <div class="glass-card p-4 bg-accent-success/10 border border-accent-success/30">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-white text-sm">预计节省积分</span>
+              <span class="text-text-primary text-sm">预计节省积分</span>
               <span class="text-accent-success font-bold">{{ estimatedSavings.discountPercent }}%</span>
             </div>
-            <div class="text-xs text-white/50">
+            <div class="text-xs text-text-secondary">
               预计节省时间: {{ estimatedSavings.timeSavedList.join(', ') || '无' }}
             </div>
-            <div class="text-xs text-white/40 mt-2">
+            <div class="text-xs text-text-secondary mt-2">
               * 大文件将在后台上传，您可以继续进行其他操作
             </div>
           </div>
         </div>
         
         <!-- 底部按钮 -->
-        <div class="flex items-center justify-between mt-8 pt-6 border-t border-white/10">
-          <button 
+        <div class="flex items-center justify-between mt-8 pt-6 border-t border-line-light">
+          <button
             @click="handleSkip"
-            class="text-white/50 hover:text-white transition-colors text-sm"
+            class="text-text-secondary hover:text-text-primary transition-colors text-sm"
           >
             跳过，不上传额外资料
           </button>
@@ -511,7 +511,7 @@ const handleClose = () => {
             <button 
               v-if="currentStep > 1"
               @click="prevStep"
-              class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+              class="px-5 py-2.5 rounded-xl bg-base-elevated hover:bg-base-elevated text-text-primary font-medium transition-colors"
             >
               上一步
             </button>
@@ -523,7 +523,7 @@ const handleClose = () => {
               class="px-5 py-2.5 rounded-xl font-medium transition-colors"
               :class="{
                 'bg-brand-primary hover:bg-brand-primary/80 text-white': (currentStep === 1 && canProceedToStep2) || (currentStep === 2 && canProceedToStep3),
-                'bg-white/5 text-white/30 cursor-not-allowed': (currentStep === 1 && !canProceedToStep2) || (currentStep === 2 && !canProceedToStep3)
+                'bg-base-elevated text-text-secondary cursor-not-allowed': (currentStep === 1 && !canProceedToStep2) || (currentStep === 2 && !canProceedToStep3)
               }"
             >
               下一步
@@ -536,7 +536,7 @@ const handleClose = () => {
               class="px-5 py-2.5 rounded-xl font-medium transition-colors"
               :class="{
                 'bg-brand-primary hover:bg-brand-primary/80 text-white': canSubmit,
-                'bg-white/5 text-white/30 cursor-not-allowed': !canSubmit
+                'bg-base-elevated text-text-secondary cursor-not-allowed': !canSubmit
               }"
             >
               开始上传

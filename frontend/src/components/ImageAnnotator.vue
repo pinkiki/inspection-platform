@@ -383,7 +383,7 @@ const getStatusBg = (severity) => {
           :key="issue.id"
           class="absolute border-2 rounded transition-shadow"
           :class="{
-            'ring-2 ring-white ring-offset-2 ring-offset-transparent': selectedIssueId === issue.id
+            'ring-2 ring-text-primary ring-offset-2 ring-offset-transparent': selectedIssueId === issue.id
           }"
           :style="{
             left: issue.bbox.x + '%',
@@ -396,7 +396,7 @@ const getStatusBg = (severity) => {
         >
           <!-- 标签 -->
           <span 
-            class="absolute -top-6 left-0 px-2 py-0.5 text-xs rounded text-white whitespace-nowrap"
+            class="absolute -top-6 left-0 px-2 py-0.5 text-xs rounded text-text-primary whitespace-nowrap"
             :style="{ backgroundColor: getBorderColor(issue.severity) }"
           >
             {{ issue.name }}
@@ -404,10 +404,10 @@ const getStatusBg = (severity) => {
           
           <!-- 调整手柄（选中时显示） -->
           <template v-if="selectedIssueId === issue.id">
-            <div class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-white rounded-full cursor-nw-resize border-2 border-brand-primary"></div>
-            <div class="absolute -top-1.5 -right-1.5 w-3 h-3 bg-white rounded-full cursor-ne-resize border-2 border-brand-primary"></div>
-            <div class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-white rounded-full cursor-sw-resize border-2 border-brand-primary"></div>
-            <div class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-white rounded-full cursor-se-resize border-2 border-brand-primary"></div>
+            <div class="absolute -top-1.5 -left-1.5 w-3 h-3 bg-text-primary rounded-full cursor-nw-resize border-2 border-brand-primary"></div>
+            <div class="absolute -top-1.5 -right-1.5 w-3 h-3 bg-text-primary rounded-full cursor-ne-resize border-2 border-brand-primary"></div>
+            <div class="absolute -bottom-1.5 -left-1.5 w-3 h-3 bg-text-primary rounded-full cursor-sw-resize border-2 border-brand-primary"></div>
+            <div class="absolute -bottom-1.5 -right-1.5 w-3 h-3 bg-text-primary rounded-full cursor-se-resize border-2 border-brand-primary"></div>
           </template>
         </div>
         
@@ -425,7 +425,7 @@ const getStatusBg = (severity) => {
       </div>
       
       <!-- 操作提示 -->
-      <div class="mt-4 text-sm text-white/50">
+      <div class="mt-4 text-sm text-text-secondary">
         <p>💡 在图片上拖拽创建新标注 · 点击选中标注 · 拖拽角落调整大小</p>
       </div>
     </div>
@@ -434,12 +434,12 @@ const getStatusBg = (severity) => {
     <div class="w-80 space-y-4">
       <!-- 标注列表 -->
       <div class="glass-card p-4">
-        <h4 class="text-white font-semibold mb-3 flex items-center justify-between">
+        <h4 class="text-text-primary font-semibold mb-3 flex items-center justify-between">
           <span>标注列表</span>
           <span class="text-brand-sky text-sm">{{ localIssues.length }} 个</span>
         </h4>
         
-        <div v-if="localIssues.length === 0" class="text-white/50 text-sm text-center py-4">
+        <div v-if="localIssues.length === 0" class="text-text-secondary text-sm text-center py-4">
           暂无标注，在图片上拖拽创建
         </div>
         
@@ -451,26 +451,26 @@ const getStatusBg = (severity) => {
             class="p-3 rounded-lg cursor-pointer transition-colors flex items-center justify-between"
             :class="[
               getStatusBg(issue.severity),
-              selectedIssueId === issue.id ? 'ring-2 ring-white/50' : ''
+              selectedIssueId === issue.id ? 'ring-2 ring-text-secondary' : ''
             ]"
           >
             <div>
-              <div class="font-medium text-white text-sm">{{ issue.name }}</div>
-              <div class="text-xs text-white/60 truncate max-w-[180px]">{{ issue.description }}</div>
+              <div class="font-medium text-text-primary text-sm">{{ issue.name }}</div>
+              <div class="text-xs text-text-secondary truncate max-w-[180px]">{{ issue.description }}</div>
             </div>
             <div class="flex items-center gap-2">
-              <button 
+              <button
                 @click.stop="openEditDialog(issue)"
-                class="p-1 hover:bg-white/20 rounded"
+                class="p-1 hover:bg-base-elevated rounded"
                 title="编辑"
               >
-                <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
               </button>
-              <button 
+              <button
                 @click.stop="deleteIssue(issue.id)"
-                class="p-1 hover:bg-white/20 rounded"
+                class="p-1 hover:bg-base-elevated rounded"
                 title="删除"
               >
                 <svg class="w-4 h-4 text-accent-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -484,11 +484,11 @@ const getStatusBg = (severity) => {
       
       <!-- 编辑表单（选中时显示） -->
       <div v-if="editingIssue" class="glass-card p-4">
-        <h4 class="text-white font-semibold mb-3">编辑标注</h4>
+        <h4 class="text-text-primary font-semibold mb-3">编辑标注</h4>
         
         <div class="space-y-3">
           <div>
-            <label class="block text-sm text-white/60 mb-1">问题类型</label>
+            <label class="block text-sm text-text-secondary mb-1">问题类型</label>
             <select 
               v-model="editingIssue.type"
               class="input-field text-sm"
@@ -500,7 +500,7 @@ const getStatusBg = (severity) => {
           </div>
           
           <div>
-            <label class="block text-sm text-white/60 mb-1">问题描述</label>
+            <label class="block text-sm text-text-secondary mb-1">问题描述</label>
             <textarea 
               v-model="editingIssue.description"
               class="input-field text-sm min-h-[80px] resize-none"

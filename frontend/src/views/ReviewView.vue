@@ -499,7 +499,7 @@ const getStatusBg = (status) => {
             
             <!-- 问题数量 -->
             <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between">
-              <span class="text-white text-xs truncate">{{ result.name }}</span>
+              <span class="text-text-primary text-xs truncate">{{ result.name }}</span>
               <span 
                 v-if="result.issues.length > 0"
                 class="px-2 py-0.5 rounded text-xs"
@@ -511,7 +511,7 @@ const getStatusBg = (status) => {
             
             <!-- Hover 遮罩 -->
             <div class="absolute inset-0 bg-brand-primary/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span class="text-white text-sm font-medium">点击查看详情</span>
+              <span class="text-text-primary text-sm font-medium">点击查看详情</span>
             </div>
           </div>
         </div>
@@ -568,15 +568,15 @@ const getStatusBg = (status) => {
         >
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-              <h3 class="text-xl font-bold text-white">
+              <h3 class="text-xl font-bold text-text-primary">
                 {{ selectedImage.name }}
               </h3>
-              <span class="text-sm text-white/50">
+              <span class="text-sm text-text-secondary">
                 ({{ currentImageIndex + 1 }} / {{ filteredResults.length }})
               </span>
               <span v-if="isEditMode" class="text-brand-sky text-sm">（编辑模式）</span>
             </div>
-            <button @click="closeDetail" class="text-white/50 hover:text-white">
+            <button @click="closeDetail" class="text-text-secondary hover:text-text-primary">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -657,22 +657,22 @@ const getStatusBg = (status) => {
             <div class="space-y-4">
               <!-- 基本信息 -->
               <div class="glass-card p-4">
-                <h4 class="text-white font-semibold mb-3">基本信息</h4>
+                <h4 class="text-text-primary font-semibold mb-3">基本信息</h4>
                 <div class="space-y-2 text-sm">
                   <div class="flex justify-between">
-                    <span class="text-white/50">置信度</span>
+                    <span class="text-text-secondary">置信度</span>
                     <span class="text-brand-sky">{{ (selectedImage.confidence * 100).toFixed(1) }}%</span>
                   </div>
                   <div class="flex justify-between">
-                    <span class="text-white/50">GPS位置</span>
-                    <span class="text-white font-mono">{{ selectedImage.gps?.lat?.toFixed(4) }}, {{ selectedImage.gps?.lng?.toFixed(4) }}</span>
+                    <span class="text-text-secondary">GPS位置</span>
+                    <span class="text-text-primary font-mono">{{ selectedImage.gps?.lat?.toFixed(4) }}, {{ selectedImage.gps?.lng?.toFixed(4) }}</span>
                   </div>
                 </div>
               </div>
               
               <!-- 问题列表 -->
               <div class="glass-card p-4">
-                <h4 class="text-white font-semibold mb-3 sticky top-0 bg-inherit z-10">
+                <h4 class="text-text-primary font-semibold mb-3 sticky top-0 bg-inherit z-10">
                   检测到的问题 ({{ selectedImage.issues.length }})
                 </h4>
                 <div v-if="selectedImage.issues.length === 0" class="text-accent-success text-sm">
@@ -694,7 +694,7 @@ const getStatusBg = (status) => {
                         <span class="font-medium" :class="getStatusColor(issue.severity)">
                           {{ issue.name }}
                         </span>
-                        <span class="text-xs text-white/50">
+                        <span class="text-xs text-text-secondary">
                           {{ (issue.confidence * 100).toFixed(0) }}%
                         </span>
                       </div>
@@ -714,7 +714,7 @@ const getStatusBg = (status) => {
                       v-if="expandedIssues.has(issue.id)"
                       class="px-3 pb-3"
                     >
-                      <p class="text-sm text-white/70">{{ issue.description }}</p>
+                      <p class="text-sm text-text-secondary">{{ issue.description }}</p>
                     </div>
                   </div>
                 </div>
@@ -722,8 +722,8 @@ const getStatusBg = (status) => {
               
               <!-- 处理建议 -->
               <div class="glass-card p-4">
-                <h4 class="text-white font-semibold mb-2">处理建议</h4>
-                <p class="text-white/70 text-sm">{{ selectedImage.suggestion }}</p>
+                <h4 class="text-text-primary font-semibold mb-2">处理建议</h4>
+                <p class="text-text-secondary text-sm">{{ selectedImage.suggestion }}</p>
               </div>
               
               <!-- 操作按钮 -->
@@ -738,7 +738,7 @@ const getStatusBg = (status) => {
           </div>
           
           <!-- 快捷键提示 -->
-          <div class="mt-4 pt-4 border-t border-white/10 text-center text-xs text-white/50">
+          <div class="mt-4 pt-4 border-t border-line-light text-center text-xs text-text-secondary">
             快捷键：← 上一张 · → 下一张 · ESC 关闭
           </div>
         </div>
@@ -759,7 +759,7 @@ const getStatusBg = (status) => {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 4px solid rgba(91,214,255,0.2);
+  border: 4px solid rgba(16,35,117,0.2);
 }
 
 .spinner-ring::after {
@@ -776,7 +776,7 @@ const getStatusBg = (status) => {
   position: absolute;
   inset: 12px;
   border-radius: 50%;
-  background: rgba(91,214,255,0.1);
+  background: rgba(16,35,117,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -793,22 +793,22 @@ const getStatusBg = (status) => {
 }
 
 .max-h-96::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 3px;
 }
 
 .max-h-96::-webkit-scrollbar-thumb {
-  background: rgba(91, 214, 255, 0.3);
+  background: rgba(16, 35, 117, 0.3);
   border-radius: 3px;
 }
 
 .max-h-96::-webkit-scrollbar-thumb:hover {
-  background: rgba(91, 214, 255, 0.5);
+  background: rgba(16, 35, 117, 0.5);
 }
 
 .progress-bar-detect {
   height: 8px;
-  background: rgba(17,31,54,0.5);
+  background: rgba(245,245,245,0.8);
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid var(--line-light);
@@ -827,37 +827,37 @@ const getStatusBg = (status) => {
   font-size: 13px;
   transition: all 0.18s ease;
   border: 1px solid var(--line);
-  background: rgba(17,31,54,0.5);
+  background: rgba(255,255,255,0.8);
   color: var(--muted);
 }
 
 .filter-btn:hover {
-  background: rgba(17,31,54,0.7);
-  border-color: rgba(91,214,255,0.35);
+  background: rgba(245,245,245,0.9);
+  border-color: rgba(16,35,117,0.25);
   color: var(--text);
 }
 
 .filter-btn.active {
-  background: rgba(91,214,255,0.14);
-  border-color: rgba(91,214,255,0.55);
+  background: rgba(16,35,117,0.1);
+  border-color: rgba(16,35,117,0.4);
   color: var(--brand);
 }
 
 .filter-btn.danger.active {
-  background: rgba(255,90,122,0.14);
-  border-color: rgba(255,90,122,0.55);
+  background: rgba(16,35,117,0.1);
+  border-color: rgba(16,35,117,0.4);
   color: var(--bad);
 }
 
 .filter-btn.warning.active {
-  background: rgba(255,209,102,0.14);
-  border-color: rgba(255,209,102,0.55);
+  background: rgba(78,102,204,0.1);
+  border-color: rgba(78,102,204,0.4);
   color: var(--warn);
 }
 
 .filter-btn.success.active {
-  background: rgba(46,229,157,0.14);
-  border-color: rgba(46,229,157,0.55);
+  background: rgba(111,188,206,0.1);
+  border-color: rgba(111,188,206,0.4);
   color: var(--good);
 }
 
@@ -865,7 +865,7 @@ const getStatusBg = (status) => {
   padding: 16px;
   border-radius: 14px;
   border: 1px solid var(--line-light);
-  background: rgba(15,27,46,0.78);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(10px);
 }
 

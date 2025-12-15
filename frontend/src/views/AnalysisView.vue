@@ -197,8 +197,8 @@ const goBack = () => {
     <!-- 标题和积分显示 -->
     <div class="flex items-start justify-between mb-8">
       <div class="text-center flex-1">
-        <h1 class="text-3xl font-bold text-white mb-2">场景分析与算法匹配</h1>
-        <p class="text-white/60">AI 正在分析您的图像，识别巡检场景并匹配最佳检测算法</p>
+        <h1 class="text-3xl font-bold text-text-primary mb-2">场景分析与算法匹配</h1>
+        <p class="text-text-secondary">AI 正在分析您的图像，识别巡检场景并匹配最佳检测算法</p>
       </div>
       <CreditsDisplay />
     </div>
@@ -217,16 +217,16 @@ const goBack = () => {
         </div>
       </div>
       
-      <h3 class="text-xl font-semibold text-white mb-2">正在分析图像特征...</h3>
-      <p class="text-white/50 mb-6">已分析 {{ store.uploadedImages.length }} 张图片</p>
-      
+      <h3 class="text-xl font-semibold text-text-primary mb-2">正在分析图像特征...</h3>
+      <p class="text-text-secondary mb-6">已分析 {{ store.uploadedImages.length }} 张图片</p>
+
       <!-- 进度条 -->
       <div class="max-w-md mx-auto">
         <div class="flex items-center justify-between mb-2 text-sm">
-          <span class="text-white/50">分析进度</span>
+          <span class="text-text-secondary">分析进度</span>
           <span class="text-brand-sky font-mono">{{ Math.round(analysisProgress) }}%</span>
         </div>
-        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-2 bg-base-elevated rounded-full overflow-hidden">
           <div 
             class="h-full bg-gradient-to-r from-brand-primary to-brand-sky transition-all duration-300"
             :style="{ width: `${analysisProgress}%` }"
@@ -246,8 +246,8 @@ const goBack = () => {
             </svg>
           </div>
           <div>
-            <h3 class="text-white font-semibold">分析完成</h3>
-            <p class="text-white/60 text-sm">已识别出可能的场景类型，请确认或手动选择</p>
+            <h3 class="text-text-primary font-semibold">分析完成</h3>
+            <p class="text-text-secondary text-sm">已识别出可能的场景类型，请确认或手动选择</p>
           </div>
         </div>
         <!-- 重新分析按钮 -->
@@ -278,15 +278,15 @@ const goBack = () => {
               :class="{
                 'bg-accent-success/20 text-accent-success': scene.confidence >= 0.9,
                 'bg-accent-warning/20 text-accent-warning': scene.confidence >= 0.7 && scene.confidence < 0.9,
-                'bg-white/10 text-white/60': scene.confidence < 0.7
+                'bg-base-elevated text-text-secondary': scene.confidence < 0.7
               }"
             >
               {{ (scene.confidence * 100).toFixed(0) }}% 匹配
             </div>
           </div>
           
-          <h3 class="text-xl font-semibold text-white mb-2">{{ scene.name }}</h3>
-          <p class="text-white/50 text-sm mb-4">{{ scene.description }}</p>
+          <h3 class="text-xl font-semibold text-text-primary mb-2">{{ scene.name }}</h3>
+          <p class="text-text-secondary text-sm mb-4">{{ scene.description }}</p>
           
           <div class="flex flex-wrap gap-2">
             <span 

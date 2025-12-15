@@ -2,20 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS变量 - 清爽的深灰色调配色 */
+/* CSS变量 - 白色主题配色 */
 :root {
-  --bg: #0b1220;
-  --paper: #0f1b2e;
-  --card: #111f36;
-  --muted: #8aa4c6;
-  --text: #e7f0ff;
-  --line: rgba(255,255,255,0.12);
-  --line-light: rgba(255,255,255,0.08);
-  --brand: #5bd6ff;
-  --good: #2ee59d;
-  --warn: #ffd166;
-  --bad: #ff5a7a;
-  --shadow: 0 14px 30px rgba(0,0,0,0.35);
+  --bg: #ffffff;
+  --paper: #ffffff;
+  --card: #ffffff;
+  --muted: #666666;
+  --text: #000000;
+  --line: rgba(0,0,0,0.12);
+  --line-light: rgba(0,0,0,0.08);
+  --brand: #102375;
+  --good: #6fbcce;
+  --warn: #4e66cc;
+  --bad: #102375;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
   --radius: 16px;
   --radius-sm: 12px;
 }
@@ -25,11 +25,11 @@
   body {
     @apply antialiased;
     color: var(--text);
-    /* 多层渐变背景 - 更清爽 */
-    background: 
-      radial-gradient(1100px 520px at 18% 0%, rgba(91,214,255,0.14), transparent 60%),
-      radial-gradient(900px 520px at 82% 10%, rgba(255,90,122,0.12), transparent 55%),
-      linear-gradient(180deg, #071021, var(--bg));
+    /* 多层渐变背景 - 白色主题 */
+    background:
+      radial-gradient(1100px 520px at 18% 0%, rgba(16,35,117,0.05), transparent 60%),
+      radial-gradient(900px 520px at 82% 10%, rgba(78,102,204,0.05), transparent 55%),
+      linear-gradient(180deg, #ffffff, #f5f5f5);
     min-height: 100vh;
   }
 
@@ -40,23 +40,23 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(15,27,46,0.5);
+    background: rgba(0,0,0,0.05);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(91,214,255,0.3);
+    background: rgba(16,35,117,0.3);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(91,214,255,0.5);
+    background: rgba(16,35,117,0.5);
   }
 }
 
 @layer components {
-  /* 玻璃拟态卡片 - 更清爽的效果 */
+  /* 玻璃拟态卡片 - 白色主题 */
   .glass-card {
-    background: rgba(15,27,46,0.78);
+    background: rgba(255,255,255,0.95);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
@@ -68,15 +68,15 @@
   }
 
   .glass-card-hover:hover {
-    background: rgba(15,27,46,0.88);
-    border-color: rgba(91,214,255,0.35);
+    background: rgba(255,255,255,1);
+    border-color: rgba(16,35,117,0.25);
     transform: translateY(-2px);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.4), 0 0 20px rgba(91,214,255,0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15), 0 0 10px rgba(16,35,117,0.08);
   }
 
   /* 内嵌卡片 - 用于卡片内的分区 */
   .inner-card {
-    background: rgba(17,31,54,0.38);
+    background: rgba(245,245,245,0.6);
     border: 1px solid var(--line-light);
     border-radius: var(--radius-sm);
     padding: 14px;
@@ -88,14 +88,14 @@
     @apply active:scale-95;
     @apply transition-all duration-200;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
-    background: linear-gradient(135deg, rgba(91,214,255,0.22), rgba(255,90,122,0.12));
-    border: 1px solid rgba(91,214,255,0.35);
-    color: var(--text);
+    background: #102375;
+    border: 1px solid #102375;
+    color: #ffffff;
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(135deg, rgba(91,214,255,0.32), rgba(255,90,122,0.18));
-    border-color: rgba(91,214,255,0.55);
+    background: #4e66cc;
+    border-color: #4e66cc;
     transform: translateY(-1px);
   }
 
@@ -104,14 +104,14 @@
     @apply px-6 py-3 font-medium rounded-xl;
     @apply active:scale-95;
     @apply transition-all duration-200;
-    background: rgba(17,31,54,0.5);
+    background: #ffffff;
     border: 1px solid var(--line);
     color: var(--text);
   }
 
   .btn-secondary:hover {
-    background: rgba(17,31,54,0.7);
-    border-color: rgba(91,214,255,0.35);
+    background: rgba(245,245,245,0.9);
+    border-color: rgba(16,35,117,0.25);
     transform: translateY(-1px);
   }
 
@@ -120,14 +120,14 @@
     @apply px-3 py-2 text-sm rounded-card-sm;
     @apply active:scale-95;
     @apply transition-all duration-200;
-    background: rgba(17,31,54,0.5);
+    background: #ffffff;
     border: 1px solid var(--line);
     color: var(--text);
   }
 
   .btn-small:hover {
-    background: rgba(17,31,54,0.7);
-    border-color: rgba(91,214,255,0.35);
+    background: rgba(245,245,245,0.9);
+    border-color: rgba(16,35,117,0.25);
     transform: translateY(-1px);
   }
 
@@ -135,7 +135,7 @@
   .input-field {
     @apply w-full px-4 py-3 rounded-xl;
     @apply transition-all duration-200;
-    background: rgba(17,31,54,0.35);
+    background: rgba(255,255,255,0.8);
     border: 1px solid var(--line-light);
     color: var(--text);
   }
@@ -147,8 +147,8 @@
 
   .input-field:focus {
     outline: none;
-    background: rgba(17,31,54,0.5);
-    border-color: rgba(91,214,255,0.55);
+    background: rgba(255,255,255,1);
+    border-color: rgba(16,35,117,0.4);
   }
 
   /* 步骤指示器 */
@@ -158,19 +158,19 @@
   }
 
   .step-indicator.active {
-    background: linear-gradient(135deg, rgba(91,214,255,0.9), rgba(78,184,224,0.8));
-    color: #061021;
-    box-shadow: 0 8px 20px rgba(91,214,255,0.25);
+    background: #102375;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16,35,117,0.25);
   }
 
   .step-indicator.completed {
-    background: linear-gradient(135deg, var(--good), #26c890);
-    color: #061021;
-    box-shadow: 0 8px 20px rgba(46,229,157,0.2);
+    background: #6fbcce;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(111,188,206,0.25);
   }
 
   .step-indicator.pending {
-    background: rgba(17,31,54,0.5);
+    background: rgba(255,255,255,0.8);
     border: 1px solid var(--line);
     color: var(--muted);
   }
@@ -180,53 +180,53 @@
     @apply px-3 py-1.5 rounded-full text-xs font-medium;
     @apply inline-flex items-center gap-1.5;
     border: 1px solid var(--line);
-    background: rgba(255,255,255,0.03);
-    color: rgba(231,240,255,0.92);
+    background: rgba(245,245,245,0.5);
+    color: var(--text);
     white-space: nowrap;
   }
 
   .status-badge.danger, .pill.danger, .pill.bad {
-    border-color: rgba(255,90,122,0.35);
-    background: rgba(255,90,122,0.10);
+    border-color: rgba(16,35,117,0.35);
+    background: rgba(16,35,117,0.10);
     color: var(--bad);
   }
 
   .status-badge.warning, .pill.warning, .pill.warn {
-    border-color: rgba(255,209,102,0.35);
-    background: rgba(255,209,102,0.10);
+    border-color: rgba(78,102,204,0.35);
+    background: rgba(78,102,204,0.10);
     color: var(--warn);
   }
 
   .status-badge.success, .pill.success, .pill.good {
-    border-color: rgba(46,229,157,0.35);
-    background: rgba(46,229,157,0.10);
+    border-color: rgba(111,188,206,0.35);
+    background: rgba(111,188,206,0.10);
     color: var(--good);
   }
 
   .status-badge.info, .pill.info {
-    border-color: rgba(91,214,255,0.35);
-    background: rgba(91,214,255,0.10);
-    color: var(--brand);
+    border-color: rgba(115,162,243,0.35);
+    background: rgba(115,162,243,0.10);
+    color: #73a2f3;
   }
 
   /* 小标签 tag */
   .tag {
     @apply inline-flex items-center px-2 py-1 rounded-full text-xs;
     border: 1px solid var(--line);
-    background: rgba(255,255,255,0.03);
+    background: rgba(245,245,245,0.5);
     white-space: nowrap;
   }
 
-  .tag.p0 { border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.12); }
-  .tag.p1 { border-color: rgba(255,209,102,0.55); background: rgba(255,209,102,0.12); }
-  .tag.p2 { border-color: rgba(91,214,255,0.55); background: rgba(91,214,255,0.10); }
-  .tag.p3 { border-color: rgba(46,229,157,0.45); background: rgba(46,229,157,0.10); }
+  .tag.p0 { border-color: rgba(16,35,117,0.55); background: rgba(16,35,117,0.12); color: #102375; }
+  .tag.p1 { border-color: rgba(78,102,204,0.55); background: rgba(78,102,204,0.12); color: #4e66cc; }
+  .tag.p2 { border-color: rgba(115,162,243,0.55); background: rgba(115,162,243,0.10); color: #73a2f3; }
+  .tag.p3 { border-color: rgba(111,188,206,0.45); background: rgba(111,188,206,0.10); color: #6fbcce; }
 
   /* KV 行 - 用于信息展示 */
   .kv-row {
     @apply flex justify-between gap-3 px-3 py-2.5 rounded-xl text-sm;
     border: 1px solid var(--line-light);
-    background: rgba(17,31,54,0.25);
+    background: rgba(245,245,245,0.5);
   }
 
   .kv-row .label {
@@ -235,14 +235,14 @@
 
   .kv-row .value {
     @apply font-mono font-bold;
-    color: rgba(231,240,255,0.95);
+    color: var(--text);
   }
 
   /* 统计卡片 */
   .stat-card {
     @apply p-4 rounded-card-sm;
     border: 1px solid var(--line-light);
-    background: rgba(17,31,54,0.25);
+    background: rgba(245,245,245,0.5);
   }
 
   .stat-card .stat-label {
@@ -263,7 +263,7 @@
   .data-table {
     @apply w-full text-sm rounded-card-sm overflow-hidden;
     border: 1px solid var(--line-light);
-    background: rgba(17,31,54,0.22);
+    background: rgba(255,255,255,0.8);
     border-collapse: separate;
     border-spacing: 0;
   }
@@ -271,14 +271,14 @@
   .data-table th,
   .data-table td {
     @apply px-3 py-2.5 text-left;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
     vertical-align: top;
   }
 
   .data-table th {
     @apply font-bold;
-    color: rgba(231,240,255,0.9);
-    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    background: rgba(245,245,245,0.8);
   }
 
   .data-table tr:last-child td {
@@ -295,8 +295,8 @@
   /* 媒体容器 - 图片/视频 */
   .media-container {
     @apply rounded-card-sm overflow-hidden relative;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(0,0,0,0.10);
+    background: rgba(245,245,245,0.5);
     min-height: 200px;
   }
 
@@ -311,19 +311,19 @@
 
   .media-chip {
     @apply px-3 py-1.5 rounded-full text-xs;
-    border: 1px solid rgba(255,255,255,0.18);
-    background: rgba(15,27,46,0.65);
+    border: 1px solid rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(8px);
-    color: rgba(231,240,255,0.95);
+    color: var(--text);
     white-space: nowrap;
   }
 }
 
 @layer utilities {
-  /* 渐变文字 - 青色到粉色 */
+  /* 渐变文字 - 蓝色渐变 */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #5bd6ff 0%, #ff5a7a 100%);
+    background-image: linear-gradient(135deg, #102375 0%, #73a2f3 100%);
   }
 
   /* 文字颜色 */

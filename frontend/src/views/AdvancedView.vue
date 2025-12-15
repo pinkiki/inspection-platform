@@ -333,10 +333,10 @@ const handleDownloadBasic = () => {
 // 获取状态颜色
 const getStatusColor = (status) => {
   switch (status) {
-    case 'danger': return '#EF4444'
-    case 'warning': return '#F97316'
-    case 'success': return '#22C55E'
-    default: return '#6FBCCE'
+    case 'danger': return '#102375'
+    case 'warning': return '#4e66cc'
+    case 'success': return '#6fbcce'
+    default: return '#6fbcce'
   }
 }
 </script>
@@ -346,8 +346,8 @@ const getStatusColor = (status) => {
     <!-- 标题和积分显示 -->
     <div class="flex items-start justify-between mb-8">
       <div class="text-center flex-1">
-        <h1 class="text-3xl font-bold text-white mb-2">进阶报告生成</h1>
-        <p class="text-white/60">
+        <h1 class="text-3xl font-bold text-text-primary mb-2">进阶报告生成</h1>
+        <p class="text-text-secondary">
           <span v-if="store.selectedTemplate?.includeOrtho">正射影像</span>
           <span v-if="store.selectedTemplate?.includeOrtho && store.selectedTemplate?.include3D"> + </span>
           <span v-if="store.selectedTemplate?.include3D">三维模型</span>
@@ -356,10 +356,10 @@ const getStatusColor = (status) => {
       </div>
       <div class="flex items-center gap-3">
         <!-- 管理员模式切换 -->
-        <button 
+        <button
           @click="toggleAdminMode"
           class="px-3 py-2 rounded-lg text-xs transition-colors"
-          :class="isAdminMode ? 'bg-accent-warning/20 text-accent-warning' : 'bg-white/10 text-white/50'"
+          :class="isAdminMode ? 'bg-accent-warning/20 text-accent-warning' : 'bg-base-elevated text-muted'"
           title="切换管理员模式"
         >
           {{ isAdminMode ? '🔧 管理员' : '👤 普通' }}
@@ -382,16 +382,16 @@ const getStatusColor = (status) => {
             <div>
               <div class="text-accent-success font-semibold mb-1">已上传额外处理资料</div>
               <div class="flex flex-wrap gap-2 mb-2">
-                <span 
+                <span
                   v-for="file in uploadedSupplementary"
                   :key="file.id"
-                  class="inline-flex items-center gap-1 px-2 py-1 bg-white/10 rounded text-xs text-white"
+                  class="inline-flex items-center gap-1 px-2 py-1 bg-base-elevated rounded text-xs text-text-primary"
                 >
                   <span>{{ supplementaryTypeIcons[file.type] }}</span>
                   <span>{{ supplementaryTypeNames[file.type] }}</span>
                 </span>
               </div>
-              <div class="text-white/50 text-xs">
+              <div class="text-muted text-xs">
                 数据来源：{{ dataSourceName }}
                 <span v-if="skippedStageNames.length > 0" class="ml-2">
                   · 已跳过：{{ skippedStageNames.join('、') }}
@@ -401,7 +401,7 @@ const getStatusColor = (status) => {
           </div>
           <div class="text-right">
             <div class="text-accent-success text-lg font-bold">节省 {{ store.supplementaryDiscount }}%</div>
-            <div class="text-white/50 text-xs">积分优惠</div>
+            <div class="text-muted text-xs">积分优惠</div>
           </div>
         </div>
       </div>
@@ -419,15 +419,15 @@ const getStatusColor = (status) => {
               </div>
             </div>
           </div>
-          <p class="text-white/60 text-sm">扫描关注公众号</p>
-          <p class="text-white/40 text-xs mt-1">任务完成后将发送通知</p>
+          <p class="text-text-secondary text-sm">扫描关注公众号</p>
+          <p class="text-muted text-xs mt-1">任务完成后将发送通知</p>
         </div>
-        
+
         <!-- 处理阶段进度 -->
         <div class="glass-card p-6 col-span-2">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-semibold text-white">处理进度</h3>
-            <div v-if="getEstimatedTime()" class="text-sm text-white/60">
+            <h3 class="text-lg font-semibold text-text-primary">处理进度</h3>
+            <div v-if="getEstimatedTime()" class="text-sm text-text-secondary">
               预计完成：{{ getEstimatedTime().date }}
               <span class="text-brand-sky ml-2">({{ getEstimatedTime().text }})</span>
             </div>
@@ -444,7 +444,7 @@ const getStatusColor = (status) => {
                 :class="{
                   'bg-accent-success text-white': getStageStatus(stage) === 'completed',
                   'bg-brand-primary text-white': getStageStatus(stage) === 'processing',
-                  'bg-white/10 text-white/30': getStageStatus(stage) === 'pending'
+                  'bg-base-elevated text-text-secondary': getStageStatus(stage) === 'pending'
                 }"
               >
                 <svg v-if="getStageStatus(stage) === 'completed'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -462,8 +462,8 @@ const getStatusColor = (status) => {
                   <span 
                     class="text-sm font-medium"
                     :class="{
-                      'text-white': getStageStatus(stage) !== 'pending',
-                      'text-white/40': getStageStatus(stage) === 'pending'
+                      'text-text-primary': getStageStatus(stage) !== 'pending',
+                      'text-text-secondary': getStageStatus(stage) === 'pending'
                     }"
                   >
                     {{ STAGE_NAMES[stage] }}
@@ -479,7 +479,7 @@ const getStatusColor = (status) => {
                 <!-- 进度条（仅处理中显示） -->
                 <div 
                   v-if="getStageStatus(stage) === 'processing'"
-                  class="mt-1 h-1.5 bg-white/10 rounded-full overflow-hidden"
+                  class="mt-1 h-1.5 bg-base-elevated rounded-full overflow-hidden"
                 >
                   <div 
                     class="h-full bg-gradient-to-r from-brand-primary to-brand-sky transition-all duration-300"
@@ -500,7 +500,7 @@ const getStatusColor = (status) => {
               <span>🔧</span>
               <span>管理员调试工具</span>
             </div>
-            <div class="text-white/60 text-sm">
+            <div class="text-text-secondary text-sm">
               当前阶段：{{ STAGE_NAMES[store.advancedProcessingStage] || '空闲' }}
               ({{ Math.round(store.getCurrentStageProgress()) }}%)
             </div>
@@ -533,29 +533,29 @@ const getStatusColor = (status) => {
     <div v-else>
       <!-- 问题统计 -->
       <div class="glass-card p-6 mb-6">
-        <h3 class="text-lg font-semibold text-white mb-4">问题点位统计</h3>
+        <h3 class="text-lg font-semibold text-text-primary mb-4">问题点位统计</h3>
         <div class="grid grid-cols-4 gap-4">
-          <div class="text-center p-4 rounded-xl bg-white/5">
-            <div class="text-3xl font-bold text-white">{{ issuePoints.length }}</div>
-            <div class="text-sm text-white/50">问题点位</div>
+          <div class="text-center p-4 rounded-xl bg-base-elevated">
+            <div class="text-3xl font-bold text-text-primary">{{ issuePoints.length }}</div>
+            <div class="text-sm text-text-secondary">问题点位</div>
           </div>
           <div class="text-center p-4 rounded-xl bg-accent-danger/10">
             <div class="text-3xl font-bold text-accent-danger">
               {{ issuePoints.filter(p => p.status === 'danger').length }}
             </div>
-            <div class="text-sm text-white/50">严重问题</div>
+            <div class="text-sm text-text-secondary">严重问题</div>
           </div>
           <div class="text-center p-4 rounded-xl bg-accent-warning/10">
             <div class="text-3xl font-bold text-accent-warning">
               {{ issuePoints.filter(p => p.status === 'warning').length }}
             </div>
-            <div class="text-sm text-white/50">一般问题</div>
+            <div class="text-sm text-text-secondary">一般问题</div>
           </div>
           <div class="text-center p-4 rounded-xl bg-brand-cyan/10">
             <div class="text-3xl font-bold text-brand-cyan">
               {{ store.detectionResults.reduce((sum, r) => sum + r.issues.length, 0) }}
             </div>
-            <div class="text-sm text-white/50">问题总数</div>
+            <div class="text-sm text-text-secondary">问题总数</div>
           </div>
         </div>
       </div>
@@ -568,8 +568,8 @@ const getStatusColor = (status) => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <span class="text-white text-sm">使用了您上传的额外资料</span>
-              <span class="text-white/50 text-xs ml-2">
+              <span class="text-text-primary text-sm">使用了您上传的额外资料</span>
+              <span class="text-text-secondary text-xs ml-2">
                 ({{ uploadedSupplementary.map(f => supplementaryTypeNames[f.type]).join('、') }})
               </span>
             </div>
@@ -581,8 +581,8 @@ const getStatusColor = (status) => {
       <!-- 成功提示 -->
       <div class="glass-card p-8 mb-6 text-center">
         <div class="text-6xl mb-4">✅</div>
-        <h3 class="text-2xl font-bold text-white mb-2">进阶报告生成完成！</h3>
-        <p class="text-white/60">所有处理阶段已完成，您可以继续导出报告</p>
+        <h3 class="text-2xl font-bold text-text-primary mb-2">进阶报告生成完成！</h3>
+        <p class="text-text-secondary">所有处理阶段已完成，您可以继续导出报告</p>
       </div>
       
       <!-- 操作按钮 -->

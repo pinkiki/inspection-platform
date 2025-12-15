@@ -47,17 +47,17 @@ const closeHistory = () => {
     <button 
       @click="toggleHistory"
       class="flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200"
-      :class="isAdminMode ? 'bg-accent-warning/20 hover:bg-accent-warning/30' : (store.hasLowCredits ? 'bg-accent-danger/20 hover:bg-accent-danger/30' : 'bg-white/10 hover:bg-white/20')"
+      :class="isAdminMode ? 'bg-accent-warning/20 hover:bg-accent-warning/30' : (store.hasLowCredits ? 'bg-accent-danger/20 hover:bg-accent-danger/30' : 'bg-base-elevated hover:bg-base-elevated')"
     >
       <svg class="w-5 h-5" :class="isAdminMode ? 'text-accent-warning' : (store.hasLowCredits ? 'text-accent-danger' : 'text-brand-sky')" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
           d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
       <span v-if="isAdminMode" class="font-bold text-accent-warning">∞</span>
-      <span v-else class="font-mono font-bold text-white">{{ store.userCredits }}</span>
-      <span class="text-sm text-white/60">{{ isAdminMode ? '管理员' : '积分' }}</span>
-      <svg 
-        class="w-4 h-4 text-white/60 transition-transform"
+      <span v-else class="font-mono font-bold text-text-primary">{{ store.userCredits }}</span>
+      <span class="text-sm text-text-secondary">{{ isAdminMode ? '管理员' : '积分' }}</span>
+      <svg
+        class="w-4 h-4 text-text-secondary transition-transform"
         :class="{ 'rotate-180': showHistory }"
         fill="none" 
         stroke="currentColor" 
@@ -84,8 +84,8 @@ const closeHistory = () => {
           @click.stop
         >
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-white">积分明细</h3>
-            <button @click="closeHistory" class="text-white/50 hover:text-white">
+            <h3 class="text-lg font-bold text-text-primary">积分明细</h3>
+            <button @click="closeHistory" class="text-text-secondary hover:text-text-primary">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -94,25 +94,25 @@ const closeHistory = () => {
           
           <!-- 当前余额 -->
           <div class="glass-card p-4 mb-4 text-center">
-            <div class="text-sm text-white/60 mb-1">当前余额</div>
+            <div class="text-sm text-text-secondary mb-1">当前余额</div>
             <div v-if="isAdminMode" class="text-3xl font-bold text-accent-warning">
               ∞
             </div>
             <div v-else class="text-3xl font-bold text-brand-sky font-mono">{{ store.userCredits }}</div>
-            <div class="text-xs text-white/50 mt-1">{{ isAdminMode ? '管理员模式' : '积分' }}</div>
+            <div class="text-xs text-text-secondary mt-1">{{ isAdminMode ? '管理员模式' : '积分' }}</div>
           </div>
           
           <!-- 历史记录 -->
           <div v-if="store.creditsHistory.length > 0" class="space-y-2">
-            <div class="text-sm text-white/60 mb-2">消费记录</div>
+            <div class="text-sm text-text-secondary mb-2">消费记录</div>
             <div 
               v-for="record in store.creditsHistory"
               :key="record.id"
-              class="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+              class="flex items-center justify-between p-3 rounded-lg bg-base-elevated hover:bg-base-elevated transition-colors"
             >
               <div class="flex-1">
-                <div class="text-white text-sm">{{ record.reason }}</div>
-                <div class="text-white/50 text-xs mt-1">{{ formatTime(record.timestamp) }}</div>
+                <div class="text-text-primary text-sm">{{ record.reason }}</div>
+                <div class="text-text-secondary text-xs mt-1">{{ formatTime(record.timestamp) }}</div>
               </div>
               <div class="flex items-center gap-3">
                 <div 
@@ -121,7 +121,7 @@ const closeHistory = () => {
                 >
                   {{ getTypeIcon(record.amount) }}{{ Math.abs(record.amount) }}
                 </div>
-                <div class="text-white/50 text-xs font-mono w-12 text-right">
+                <div class="text-text-secondary text-xs font-mono w-12 text-right">
                   {{ record.balance }}
                 </div>
               </div>
@@ -129,7 +129,7 @@ const closeHistory = () => {
           </div>
           
           <!-- 无记录 -->
-          <div v-else class="text-center py-8 text-white/50">
+          <div v-else class="text-center py-8 text-text-secondary">
             暂无消费记录
           </div>
         </div>

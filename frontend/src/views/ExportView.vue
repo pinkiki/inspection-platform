@@ -408,7 +408,7 @@ const newProject = () => {
                 </svg>
                 基本信息
               </span>
-              <span class="text-xs text-white/50 font-normal">必填</span>
+              <span class="text-xs text-text-secondary font-normal">必填</span>
             </h3>
             
             <div class="grid grid-cols-2 gap-4">
@@ -637,7 +637,7 @@ const newProject = () => {
                 </svg>
                 合规/审计信息
               </span>
-              <span class="text-xs text-white/50 font-normal">可选</span>
+              <span class="text-xs text-text-secondary font-normal">可选</span>
             </h3>
             
             <div class="grid grid-cols-2 gap-4">
@@ -680,24 +680,24 @@ const newProject = () => {
             <!-- 统计数据 -->
             <div class="space-y-3 mb-6">
               <div class="preview-stat">
-                <span class="text-white/60 text-sm">总图片数</span>
-                <span class="text-white font-bold font-mono">{{ store.statistics.totalImages }}</span>
+                <span class="text-text-secondary text-sm">总图片数</span>
+                <span class="text-text-primary font-bold font-mono">{{ store.statistics.totalImages }}</span>
               </div>
               <div class="preview-stat">
-                <span class="text-white/60 text-sm">问题总数</span>
+                <span class="text-text-secondary text-sm">问题总数</span>
                 <span class="text-accent-danger font-bold font-mono">{{ store.statistics.issueCount }}</span>
               </div>
               <div class="preview-stat">
-                <span class="text-white/60 text-sm">平均置信度</span>
+                <span class="text-text-secondary text-sm">平均置信度</span>
                 <span class="text-brand-sky font-bold font-mono">{{ store.statistics.avgConfidence }}%</span>
               </div>
               <div class="preview-stat">
-                <span class="text-white/60 text-sm">场景类型</span>
-                <span class="text-white font-bold">{{ store.analysisResult?.sceneName }}</span>
+                <span class="text-text-secondary text-sm">场景类型</span>
+                <span class="text-text-primary font-bold">{{ store.analysisResult?.sceneName }}</span>
               </div>
               <div class="preview-stat">
-                <span class="text-white/60 text-sm">报告模板</span>
-                <span class="text-white font-bold">{{ store.selectedTemplate?.name }}</span>
+                <span class="text-text-secondary text-sm">报告模板</span>
+                <span class="text-text-primary font-bold">{{ store.selectedTemplate?.name }}</span>
               </div>
             </div>
             
@@ -716,52 +716,52 @@ const newProject = () => {
             </button>
             
             <!-- 报告包含 -->
-            <div class="border-t border-white/10 pt-4">
-              <div class="text-sm text-white/60 mb-3">报告包含：</div>
+            <div class="border-t border-line-light pt-4">
+              <div class="text-sm text-text-secondary mb-3">报告包含：</div>
               <div class="space-y-2 text-sm">
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>封面信息 / 报告摘要</span>
                 </div>
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>任务信息 / 设备参数</span>
                 </div>
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>AI分析说明</span>
                 </div>
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>问题清单</span>
                 </div>
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>问题详情（含证据图）</span>
                 </div>
-                <div v-if="store.selectedTemplate?.includeOrtho" class="flex items-center gap-2 text-white/80">
+                <div v-if="store.selectedTemplate?.includeOrtho" class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>正射影像图</span>
                 </div>
-                <div v-if="store.selectedTemplate?.include3D" class="flex items-center gap-2 text-white/80">
+                <div v-if="store.selectedTemplate?.include3D" class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>三维模型</span>
                 </div>
-                <div class="flex items-center gap-2 text-white/80">
+                <div class="flex items-center gap-2 text-text-primary">
                   <svg class="w-4 h-4 text-accent-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
@@ -814,8 +814,8 @@ const newProject = () => {
   height: 96px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(46,229,157,0.2), rgba(46,229,157,0.1));
-  border: 1px solid rgba(46,229,157,0.3);
+  background: linear-gradient(135deg, rgba(111,188,206,0.2), rgba(111,188,206,0.1));
+  border: 1px solid rgba(111,188,206,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -826,7 +826,7 @@ const newProject = () => {
   text-align: center;
   padding: 16px;
   border-radius: 12px;
-  background: rgba(17,31,54,0.35);
+  background: rgba(245,245,245,0.6);
   border: 1px solid var(--line-light);
 }
 
@@ -839,19 +839,19 @@ const newProject = () => {
   cursor: pointer;
   transition: all 0.18s ease;
   border: 1px solid var(--line);
-  background: rgba(17,31,54,0.5);
+  background: rgba(255,255,255,0.8);
   color: var(--muted);
 }
 
 .format-option:hover {
-  background: rgba(17,31,54,0.7);
-  border-color: rgba(91,214,255,0.35);
+  background: rgba(245,245,245,0.9);
+  border-color: rgba(16,35,117,0.25);
   color: var(--text);
 }
 
 .format-option.active {
-  background: linear-gradient(135deg, rgba(91,214,255,0.22), rgba(255,90,122,0.12));
-  border-color: rgba(91,214,255,0.55);
+  background: rgba(16,35,117,0.1);
+  border-color: rgba(16,35,117,0.4);
   color: var(--text);
 }
 
@@ -873,12 +873,12 @@ const newProject = () => {
 .auto-field {
   padding: 12px;
   border-radius: 10px;
-  background: rgba(91, 214, 255, 0.05);
-  border: 1px solid rgba(91, 214, 255, 0.15);
+  background: rgba(16, 35, 117, 0.05);
+  border: 1px solid rgba(16, 35, 117, 0.15);
 }
 
 .auto-value {
-  color: rgba(231, 240, 255, 0.95);
+  color: var(--text);
   font-size: 14px;
   margin-top: 4px;
   word-break: break-all;
@@ -890,7 +890,7 @@ const newProject = () => {
   align-items: center;
   padding: 10px 12px;
   border-radius: 8px;
-  background: rgba(17,31,54,0.35);
+  background: rgba(245,245,245,0.6);
   border: 1px solid var(--line-light);
 }
 
@@ -905,7 +905,7 @@ const newProject = () => {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 4px solid rgba(91,214,255,0.2);
+  border: 4px solid rgba(16,35,117,0.2);
 }
 
 .generating-ring::after {
@@ -922,7 +922,7 @@ const newProject = () => {
   position: absolute;
   inset: 12px;
   border-radius: 50%;
-  background: rgba(91,214,255,0.1);
+  background: rgba(16,35,117,0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -935,7 +935,7 @@ const newProject = () => {
 
 .progress-bar-gen {
   height: 8px;
-  background: rgba(17,31,54,0.5);
+  background: rgba(245,245,245,0.8);
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid var(--line-light);

@@ -7,36 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        // 基础色板 - 深灰色调，更清爽
+        // 基础色板 - 白色主题
         'base': {
-          'bg': '#0b1220',        // 深色背景
-          'paper': '#0f1b2e',     // 纸张/面板背景
-          'card': '#111f36',      // 卡片背景
-          'elevated': '#162847',  // 悬浮卡片
+          'bg': '#ffffff',        // 白色背景
+          'paper': '#ffffff',     // 纸张/面板背景
+          'card': '#ffffff',      // 卡片背景
+          'elevated': '#f5f5f5',  // 悬浮卡片
         },
-        // 品牌色 - 青色主调
+        // 品牌色 - 蓝色主调
         'brand': {
-          'primary': '#5bd6ff',   // 品牌青 - 主色调
-          'secondary': '#4eb8e0', // 次要青
-          'muted': '#8aa4c6',     // 柔和文字
-          'deep': '#0f1b2e',      // 深色背景（保留兼容）
-          'sky': '#5bd6ff',       // 青蓝（兼容旧代码）
-          'cyan': '#5bd6ff',      // 青蓝（兼容）
-          'light': '#e7f0ff',     // 浅色文字
+          'primary': '#102375',   // 深蓝色 - 主色调
+          'secondary': '#4e66cc', // 蓝色 - 次要色
+          'muted': '#666666',     // 柔和灰色文字
+          'deep': '#102375',      // 深蓝色（保留兼容）
+          'sky': '#73a2f3',       // 浅蓝色（兼容旧代码）
+          'cyan': '#6fbcce',      // 青色（兼容）
+          'light': '#000000',     // 黑色（原浅蓝色看不清）
         },
-        // 强调色 - 更鲜艳清晰
+        // 强调色
         'accent': {
-          'danger': '#ff5a7a',    // 柔和红
-          'warning': '#ffd166',   // 金黄色
-          'caution': '#ffb347',   // 橙色
-          'success': '#2ee59d',   // 翠绿色
-          'info': '#5bd6ff',      // 信息青
+          'danger': '#102375',    // 深蓝色
+          'warning': '#4e66cc',   // 蓝色
+          'caution': '#73a2f3',   // 浅蓝色
+          'success': '#6fbcce',   // 青色
+          'info': '#73a2f3',      // 浅蓝色
         },
         // 文字颜色
         'text': {
-          'primary': '#e7f0ff',   // 主要文字
-          'secondary': '#8aa4c6', // 次要文字
-          'muted': 'rgba(231,240,255,0.5)', // 更淡的文字
+          'primary': '#000000',   // 黑色主要文字
+          'secondary': '#666666', // 灰色次要文字
+          'muted': '#999999',     // 更淡的灰色文字
         }
       },
       fontFamily: {
@@ -44,23 +44,23 @@ export default {
         'mono': ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
       },
       backgroundImage: {
-        'gradient-brand': 'linear-gradient(180deg, #071021, #0b1220)',
-        'gradient-radial-tl': 'radial-gradient(1100px 520px at 18% 0%, rgba(91,214,255,0.14), transparent 60%)',
-        'gradient-radial-tr': 'radial-gradient(900px 520px at 82% 10%, rgba(255,90,122,0.12), transparent 55%)',
-        'gradient-card': 'linear-gradient(135deg, rgba(91,214,255,0.08) 0%, rgba(255,90,122,0.04) 100%)',
+        'gradient-brand': 'linear-gradient(180deg, #ffffff, #f5f5f5)',
+        'gradient-radial-tl': 'radial-gradient(1100px 520px at 18% 0%, rgba(16,35,117,0.05), transparent 60%)',
+        'gradient-radial-tr': 'radial-gradient(900px 520px at 82% 10%, rgba(78,102,204,0.05), transparent 55%)',
+        'gradient-card': 'linear-gradient(135deg, rgba(16,35,117,0.03) 0%, rgba(115,162,243,0.03) 100%)',
       },
       borderColor: {
-        'line': 'rgba(255,255,255,0.12)',
-        'line-light': 'rgba(255,255,255,0.08)',
+        'line': 'rgba(0,0,0,0.12)',
+        'line-light': 'rgba(0,0,0,0.08)',
       },
       backdropBlur: {
         'glass': '10px',
       },
       boxShadow: {
-        'card': '0 14px 30px rgba(0,0,0,0.35)',
-        'glow-brand': '0 10px 22px rgba(91,214,255,0.12)',
-        'glow-danger': '0 8px 20px rgba(255,90,122,0.15)',
-        'glow-success': '0 8px 20px rgba(46,229,157,0.15)',
+        'card': '0 2px 8px rgba(0,0,0,0.1)',
+        'glow-brand': '0 4px 12px rgba(16,35,117,0.15)',
+        'glow-danger': '0 4px 12px rgba(16,35,117,0.15)',
+        'glow-success': '0 4px 12px rgba(111,188,206,0.15)',
       },
       borderRadius: {
         'card': '16px',
@@ -82,8 +82,8 @@ export default {
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 5px rgba(91,214,255,0.2)' },
-          '100%': { boxShadow: '0 0 20px rgba(91,214,255,0.4)' },
+          '0%': { boxShadow: '0 0 5px rgba(16,35,117,0.2)' },
+          '100%': { boxShadow: '0 0 20px rgba(16,35,117,0.4)' },
         },
       },
     },

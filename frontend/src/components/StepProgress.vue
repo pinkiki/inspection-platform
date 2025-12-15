@@ -203,7 +203,7 @@ const cancelRestart = () => {
 <style scoped>
 .step-progress-bar {
   border-bottom: 1px solid var(--line-light);
-  background: rgba(15,27,46,0.5);
+  background: rgba(255,255,255,0.9);
   backdrop-filter: blur(8px);
 }
 
@@ -252,7 +252,7 @@ const cancelRestart = () => {
 }
 
 .step-line.active {
-  background: linear-gradient(90deg, var(--brand), rgba(91,214,255,0.3));
+  background: linear-gradient(90deg, var(--brand), rgba(16,35,117,0.3));
 }
 
 .step-line.pending {

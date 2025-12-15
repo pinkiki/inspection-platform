@@ -136,7 +136,7 @@ onUnmounted(() => {
 .footer-bar {
   border-top: 1px solid var(--line-light);
   padding: 14px 0;
-  background: rgba(15,27,46,0.3);
+  background: rgba(255,255,255,0.9);
 }
 
 .modal-icon {
@@ -144,8 +144,8 @@ onUnmounted(() => {
   height: 64px;
   margin: 0 auto 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(91,214,255,0.2), rgba(255,90,122,0.1));
-  border: 1px solid rgba(91,214,255,0.3);
+  background: linear-gradient(135deg, rgba(16,35,117,0.1), rgba(115,162,243,0.1));
+  border: 1px solid rgba(16,35,117,0.2);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -45,7 +45,7 @@ const getSeverityColor = (severity) => {
     case 'danger': return 'text-accent-danger'
     case 'warning': return 'text-accent-warning'
     case 'caution': return 'text-brand-sky'
-    default: return 'text-white/50'
+    default: return 'text-text-secondary'
   }
 }
 
@@ -54,7 +54,7 @@ const getSeverityBg = (severity) => {
     case 'danger': return 'bg-accent-danger/20'
     case 'warning': return 'bg-accent-warning/20'
     case 'caution': return 'bg-brand-sky/20'
-    default: return 'bg-white/10'
+    default: return 'bg-base-elevated'
   }
 }
 
@@ -71,7 +71,7 @@ const getSeverityName = (severity) => {
 <template>
   <div class="basic-report-preview">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-white">基础报告预览</h3>
+      <h3 class="text-lg font-semibold text-text-primary">基础报告预览</h3>
       <button @click="downloadBasicReport" class="btn-secondary text-sm py-2">
         <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -84,20 +84,20 @@ const getSeverityName = (severity) => {
     <!-- 统计数据 -->
     <div class="grid grid-cols-4 gap-4 mb-6">
       <div class="glass-card p-4 text-center">
-        <div class="text-2xl font-bold text-white">{{ store.statistics.totalImages }}</div>
-        <div class="text-xs text-white/60 mt-1">总图片数</div>
+        <div class="text-2xl font-bold text-text-primary">{{ store.statistics.totalImages }}</div>
+        <div class="text-xs text-text-secondary mt-1">总图片数</div>
       </div>
       <div class="glass-card p-4 text-center">
         <div class="text-2xl font-bold text-accent-danger">{{ issuesByType.danger.length }}</div>
-        <div class="text-xs text-white/60 mt-1">严重问题</div>
+        <div class="text-xs text-text-secondary mt-1">严重问题</div>
       </div>
       <div class="glass-card p-4 text-center">
         <div class="text-2xl font-bold text-accent-warning">{{ issuesByType.warning.length }}</div>
-        <div class="text-xs text-white/60 mt-1">一般问题</div>
+        <div class="text-xs text-text-secondary mt-1">一般问题</div>
       </div>
       <div class="glass-card p-4 text-center">
         <div class="text-2xl font-bold text-brand-sky">{{ totalIssues }}</div>
-        <div class="text-xs text-white/60 mt-1">问题总数</div>
+        <div class="text-xs text-text-secondary mt-1">问题总数</div>
       </div>
     </div>
     
@@ -111,7 +111,7 @@ const getSeverityName = (severity) => {
               :class="getSeverityColor(severity)"
               style="background-color: currentColor;"
             ></div>
-            <h4 class="font-semibold text-white">
+            <h4 class="font-semibold text-text-primary">
               {{ getSeverityName(severity) }} ({{ issues.length }})
             </h4>
           </div>
@@ -123,18 +123,18 @@ const getSeverityName = (severity) => {
               class="flex items-start gap-3 p-2 rounded-lg"
               :class="getSeverityBg(severity)"
             >
-              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-xs text-white">
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-base-elevated flex items-center justify-center text-xs text-text-primary">
                 {{ index + 1 }}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-2">
-                  <span class="font-medium text-white text-sm">{{ issue.name }}</span>
-                  <span class="text-xs text-white/50 flex-shrink-0">
+                  <span class="font-medium text-text-primary text-sm">{{ issue.name }}</span>
+                  <span class="text-xs text-text-secondary flex-shrink-0">
                     {{ (issue.confidence * 100).toFixed(0) }}%
                   </span>
                 </div>
-                <div class="text-xs text-white/60 mt-1">{{ issue.description }}</div>
-                <div class="text-xs text-white/40 mt-1">图片: {{ issue.imageName }}</div>
+                <div class="text-xs text-text-primary mt-1">{{ issue.description }}</div>
+                <div class="text-xs text-text-secondary mt-1">图片: {{ issue.imageName }}</div>
               </div>
             </div>
           </div>
@@ -144,8 +144,8 @@ const getSeverityName = (severity) => {
       <!-- 无问题提示 -->
       <div v-if="totalIssues === 0" class="glass-card p-8 text-center">
         <div class="text-4xl mb-3">✅</div>
-        <div class="text-white font-semibold">未检测到问题</div>
-        <div class="text-white/50 text-sm mt-1">所有图片状态良好</div>
+        <div class="text-text-primary font-semibold">未检测到问题</div>
+        <div class="text-text-secondary text-sm mt-1">所有图片状态良好</div>
       </div>
     </div>
   </div>

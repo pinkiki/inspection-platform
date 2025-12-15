@@ -812,10 +812,10 @@ const getLocationLines = (issue) => {
         @click.stop
       >
         <!-- 顶部栏 -->
-        <div class="flex items-center justify-between p-4 border-b border-white/10">
+        <div class="flex items-center justify-between p-4 border-b border-line-light">
           <div>
-            <h3 class="text-xl font-bold text-white">{{ template.name }} · 报告预览</h3>
-            <p class="text-white/50 text-sm mt-1">
+            <h3 class="text-xl font-bold text-text-primary">{{ template.name }} · 报告预览</h3>
+            <p class="text-text-secondary text-sm mt-1">
               场景：{{ sceneName }} · {{ currentReport.sub }}
               <span v-if="props.useRealData" class="ml-2 px-2 py-0.5 bg-brand-primary/20 text-brand-sky text-xs rounded">使用真实数据</span>
               <span v-if="props.useRealData && reportData.issues" class="ml-2 text-xs">
@@ -825,7 +825,7 @@ const getLocationLines = (issue) => {
           </div>
           <button 
             @click="emit('close')" 
-            class="w-10 h-10 flex items-center justify-center rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+            class="w-10 h-10 flex items-center justify-center rounded-xl text-text-secondary hover:text-text-primary hover:bg-base-elevated transition-colors"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -875,7 +875,7 @@ const getLocationLines = (issue) => {
             <div class="grid grid-cols-4 gap-3 mb-4">
               <div class="stat-card">
                 <div class="stat-label">输入照片</div>
-                <div class="stat-value text-white">{{ fmt.num(reportData.summary.totalPhotos) }}</div>
+                <div class="stat-value text-text-primary">{{ fmt.num(reportData.summary.totalPhotos) }}</div>
                 <div class="stat-sub">有效：{{ fmt.num(reportData.summary.validPhotos) }}</div>
               </div>
               <div class="stat-card">
@@ -896,7 +896,7 @@ const getLocationLines = (issue) => {
             </div>
             
             <div class="text-mini">
-              <span class="font-semibold text-white/80">高频问题类型：</span>
+              <span class="font-semibold text-text-primary">高频问题类型：</span>
               {{ reportData.summary.topTypes.map(x => `${x.type}(${x.count})`).join(' · ') }}
             </div>
           </div>
@@ -934,7 +934,7 @@ const getLocationLines = (issue) => {
                 </div>
               </div>
               <div class="text-mini mb-3">{{ reportData.ai.notes }}</div>
-              <div class="text-mini font-semibold text-white/80 mb-2">模型版本：</div>
+              <div class="text-mini font-semibold text-text-primary mb-2">模型版本：</div>
               <div class="flex flex-wrap gap-2">
                 <span 
                   v-for="m in reportData.ai.modelVersions"
@@ -984,8 +984,8 @@ const getLocationLines = (issue) => {
             <!-- 无问题时的提示 -->
             <div v-else class="text-center py-8">
               <div class="text-4xl mb-3">✅</div>
-              <div class="text-white/70 text-sm">未检测到问题</div>
-              <div class="text-white/50 text-xs mt-2">所有图片状态良好</div>
+              <div class="text-text-primary text-sm">未检测到问题</div>
+              <div class="text-text-secondary text-xs mt-2">所有图片状态良好</div>
             </div>
           </div>
           
@@ -999,7 +999,7 @@ const getLocationLines = (issue) => {
             <!-- 无问题提示 -->
             <div v-if="!reportData.imageGroups || reportData.imageGroups.length === 0" class="mt-4 text-center py-8">
               <div class="text-4xl mb-3">✅</div>
-              <div class="text-white/70 text-sm">未检测到问题</div>
+              <div class="text-text-primary text-sm">未检测到问题</div>
             </div>
             
             <!-- 按图片分组显示 -->
@@ -1007,12 +1007,12 @@ const getLocationLines = (issue) => {
               v-for="(imageGroup, groupIndex) in reportData.imageGroups?.slice(0, 3)" 
               :key="imageGroup.imageId"
               class="mt-4"
-              :class="{ 'border-t border-white/10 pt-4': groupIndex > 0 }"
+              :class="{ 'border-t border-line-light pt-4': groupIndex > 0 }"
             >
               <!-- 图片标题 -->
               <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center gap-3">
-                  <span class="font-mono text-white font-semibold">{{ imageGroup.imageName }}</span>
+                  <span class="font-mono text-text-primary font-semibold">{{ imageGroup.imageName }}</span>
                   <span class="px-2 py-1 rounded text-xs bg-brand-primary/20 text-brand-sky">
                     共 {{ imageGroup.issues.length }} 个问题
                   </span>
@@ -1064,7 +1064,7 @@ const getLocationLines = (issue) => {
                   >
                     <!-- 问题标题 -->
                     <div class="flex items-center justify-between mb-2">
-                      <span class="font-semibold text-white text-sm">
+                      <span class="font-semibold text-text-primary text-sm">
                         {{ issueIndex + 1 }}. {{ issue.type }}
                       </span>
                       <span 
@@ -1080,12 +1080,12 @@ const getLocationLines = (issue) => {
                     </div>
                     
                     <!-- 问题描述 -->
-                    <div class="text-xs text-white/70 mb-2">
+                    <div class="text-xs text-text-primary mb-2">
                       {{ issue.description }}
                     </div>
                     
                     <!-- 置信度 -->
-                    <div class="text-xs text-white/50">
+                    <div class="text-xs text-text-secondary">
                       置信度：{{ (issue.confidence * 100).toFixed(0) }}%
                     </div>
                   </div>
@@ -1111,10 +1111,10 @@ const getLocationLines = (issue) => {
                 <div 
                   v-for="att in reportData.attachments" 
                   :key="att.name"
-                  class="flex items-start justify-between gap-3 p-2 rounded-lg border border-white/5 bg-white/[0.02]"
+                  class="flex items-start justify-between gap-3 p-2 rounded-lg border border-line-light bg-base-elevated"
                 >
                   <div>
-                    <div class="text-sm text-white/90 font-medium">{{ att.name }}</div>
+                    <div class="text-sm text-text-primary font-medium">{{ att.name }}</div>
                     <div class="text-mini">{{ att.desc }}</div>
                   </div>
                   <span class="tag flex-shrink-0">附件</span>
@@ -1182,7 +1182,7 @@ const getLocationLines = (issue) => {
         </div>
         
         <!-- 底部 -->
-        <div class="flex items-center justify-between p-4 border-t border-white/10 text-mini">
+        <div class="flex items-center justify-between p-4 border-t border-line-light text-mini">
           <div>
             生成时间：{{ fmt.dt(reportData.header.createdAt) }} · 报告版本：v1.0
           </div>

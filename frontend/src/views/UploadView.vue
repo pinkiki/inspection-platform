@@ -299,7 +299,7 @@ const startAnalysis = async () => {
 <style scoped>
 .upload-active {
   border: 2px solid var(--brand) !important;
-  background: rgba(91,214,255,0.05) !important;
+  background: rgba(16,35,117,0.05) !important;
 }
 
 .upload-dashed {
@@ -311,7 +311,7 @@ const startAnalysis = async () => {
   height: 80px;
   margin: 0 auto 24px;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(91,214,255,0.2), rgba(255,90,122,0.1));
+  background: linear-gradient(135deg, rgba(16,35,117,0.15), rgba(115,162,243,0.1));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,8 +322,8 @@ const startAnalysis = async () => {
   position: absolute;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.1);
   transition: all 0.3s ease;
 }
 
@@ -339,20 +339,20 @@ const startAnalysis = async () => {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand), rgba(91,214,255,0.8));
+  background: #102375;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #061021;
+  color: #ffffff;
   font-weight: 800;
   font-size: 16px;
-  box-shadow: 0 8px 20px rgba(91,214,255,0.3);
+  box-shadow: 0 4px 12px rgba(16,35,117,0.3);
   z-index: 100;
 }
 
 .progress-bar {
   height: 8px;
-  background: rgba(17,31,54,0.5);
+  background: rgba(245,245,245,0.8);
   border-radius: 999px;
   overflow: hidden;
   border: 1px solid var(--line-light);
