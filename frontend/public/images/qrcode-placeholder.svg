@@ -1,0 +1,62 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="200" height="200" fill="white"/>
+  
+  <!-- 二维码样式的方格图案 -->
+  <!-- 左上角定位标记 -->
+  <rect x="10" y="10" width="50" height="50" fill="black"/>
+  <rect x="20" y="20" width="30" height="30" fill="white"/>
+  <rect x="25" y="25" width="20" height="20" fill="black"/>
+  
+  <!-- 右上角定位标记 -->
+  <rect x="140" y="10" width="50" height="50" fill="black"/>
+  <rect x="150" y="20" width="30" height="30" fill="white"/>
+  <rect x="155" y="25" width="20" height="20" fill="black"/>
+  
+  <!-- 左下角定位标记 -->
+  <rect x="10" y="140" width="50" height="50" fill="black"/>
+  <rect x="20" y="150" width="30" height="30" fill="white"/>
+  <rect x="25" y="155" width="20" height="20" fill="black"/>
+  
+  <!-- 中间的模拟二维码图案 -->
+  <rect x="70" y="20" width="10" height="10" fill="black"/>
+  <rect x="85" y="20" width="10" height="10" fill="black"/>
+  <rect x="100" y="20" width="10" height="10" fill="black"/>
+  <rect x="115" y="20" width="10" height="10" fill="black"/>
+  
+  <rect x="20" y="70" width="10" height="10" fill="black"/>
+  <rect x="35" y="70" width="10" height="10" fill="black"/>
+  <rect x="50" y="70" width="10" height="10" fill="black"/>
+  
+  <rect x="70" y="70" width="10" height="10" fill="black"/>
+  <rect x="85" y="85" width="10" height="10" fill="black"/>
+  <rect x="100" y="70" width="10" height="10" fill="black"/>
+  <rect x="115" y="85" width="10" height="10" fill="black"/>
+  
+  <rect x="70" y="100" width="10" height="10" fill="black"/>
+  <rect x="85" y="115" width="10" height="10" fill="black"/>
+  <rect x="100" y="100" width="10" height="10" fill="black"/>
+  <rect x="115" y="115" width="10" height="10" fill="black"/>
+  
+  <rect x="140" y="70" width="10" height="10" fill="black"/>
+  <rect x="155" y="70" width="10" height="10" fill="black"/>
+  <rect x="170" y="70" width="10" height="10" fill="black"/>
+  
+  <rect x="70" y="140" width="10" height="10" fill="black"/>
+  <rect x="85" y="140" width="10" height="10" fill="black"/>
+  <rect x="100" y="140" width="10" height="10" fill="black"/>
+  <rect x="115" y="140" width="10" height="10" fill="black"/>
+  
+  <rect x="140" y="100" width="10" height="10" fill="black"/>
+  <rect x="155" y="115" width="10" height="10" fill="black"/>
+  <rect x="170" y="100" width="10" height="10" fill="black"/>
+  
+  <rect x="140" y="140" width="10" height="10" fill="black"/>
+  <rect x="155" y="155" width="10" height="10" fill="black"/>
+  <rect x="170" y="140" width="10" height="10" fill="black"/>
+  
+  <rect x="140" y="170" width="10" height="10" fill="black"/>
+  <rect x="155" y="170" width="10" height="10" fill="black"/>
+  <rect x="170" y="170" width="10" height="10" fill="black"/>
+</svg>
+
