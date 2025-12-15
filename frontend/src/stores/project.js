@@ -100,19 +100,42 @@ export const useProjectStore = defineStore('project', () => {
   })
   
   // ========== 积分系统相关 ==========
-  
+
   // 用户积分余额
   const userCredits = ref(10000)
-  
+
   // 初始化时检查并充值（开发阶段辅助）
   if (userCredits.value < 10000) {
     const needRecharge = 10000 - userCredits.value
     userCredits.value = 10000
     console.log(`已自动充值 ${needRecharge} 积分，当前余额：10000`)
   }
-  
+
   // 积分消费历史
   const creditsHistory = ref([])
+
+  // ========== 个人信息相关 ==========
+
+  // 当前用户信息
+  const currentUser = ref({
+    name: '张三',
+    email: 'zhangsan@example.com',
+    avatar: null,
+    joinDate: '2024-01-15'
+  })
+
+  // 用户统计信息
+  const userStats = ref({
+    totalProjects: 12,
+    totalReports: 8,
+    lastLogin: new Date().toLocaleString()
+  })
+
+  // 步骤快照列表（最多保存10个）
+  const stepSnapshots = ref([])
+
+  // 个人信息模态框显示状态
+  const showProfileModal = ref(false)
   
   // 进阶报告是否已处理完成
   const isAdvancedProcessed = ref(false)
@@ -308,19 +331,41 @@ export const useProjectStore = defineStore('project', () => {
   }
   
   // 扣除积分
-  function deductCredits(amount, reason) {
+  async function deductCredits(amount, reason) {
     if (!canAfford(amount)) {
       return false
     }
-    
+
     const isAdmin = localStorage.getItem('adminMode') === 'true'
-    
+    const balanceBefore = userCredits.value
+
     // 管理员模式下不实际扣除积分
     if (!isAdmin) {
       userCredits.value -= amount
     }
-    
-    // 记录消费历史
+
+    const balanceAfter = userCredits.value
+
+    // 调用后端API记录积分变化
+    try {
+      await fetch('/api/credits/deduct', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 1,
+          amount: amount,
+          reason: reason + (isAdmin ? ' [管理员模式]' : ''),
+          balance_before: balanceBefore,
+          balance_after: balanceAfter
+        })
+      })
+    } catch (error) {
+      console.error('记录积分扣除失败:', error)
+    }
+
+    // 记录消费历史（本地）
     creditsHistory.value.unshift({
       id: Date.now(),
       amount: -amount,
@@ -328,19 +373,40 @@ export const useProjectStore = defineStore('project', () => {
       balance: userCredits.value,
       timestamp: new Date().toISOString()
     })
-    
+
     // 限制历史记录数量
     if (creditsHistory.value.length > 50) {
       creditsHistory.value = creditsHistory.value.slice(0, 50)
     }
-    
+
     return true
   }
-  
+
   // 增加积分（充值或退款）
-  function addCredits(amount, reason) {
+  async function addCredits(amount, reason) {
+    const balanceBefore = userCredits.value
     userCredits.value += amount
-    
+    const balanceAfter = userCredits.value
+
+    // 调用后端API记录积分变化
+    try {
+      await fetch('/api/credits/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 1,
+          amount: amount,
+          reason: reason,
+          balance_before: balanceBefore,
+          balance_after: balanceAfter
+        })
+      })
+    } catch (error) {
+      console.error('记录积分增加失败:', error)
+    }
+
     creditsHistory.value.unshift({
       id: Date.now(),
       amount: amount,
@@ -348,7 +414,7 @@ export const useProjectStore = defineStore('project', () => {
       balance: userCredits.value,
       timestamp: new Date().toISOString()
     })
-    
+
     if (creditsHistory.value.length > 50) {
       creditsHistory.value = creditsHistory.value.slice(0, 50)
     }
@@ -541,6 +607,131 @@ export const useProjectStore = defineStore('project', () => {
       .filter(f => f.status === 'completed')
       .map(f => f.type)
   }
+
+  // ========== 个人信息相关方法 ==========
+
+  // 创建步骤快照
+  function createSnapshot() {
+    const snapshot = {
+      id: Date.now(),
+      step: currentStep.value,
+      stepName: getStepName(currentStep.value),
+      timestamp: new Date().toISOString(),
+      imageCount: uploadedImages.value.length,
+      templateName: selectedTemplate.value?.name || '未选择',
+      analysisResult: analysisResult.value ? { ...analysisResult.value } : null,
+      selectedTemplate: selectedTemplate.value ? { ...selectedTemplate.value } : null,
+      detectionResults: [...detectionResults.value],
+      projectInfo: { ...projectInfo.value },
+      userCredits: userCredits.value,
+      creditsHistory: [...creditsHistory.value]
+    }
+
+    // 添加到快照列表，最多保留10个
+    stepSnapshots.value.unshift(snapshot)
+    if (stepSnapshots.value.length > 10) {
+      stepSnapshots.value = stepSnapshots.value.slice(0, 10)
+    }
+
+    return snapshot
+  }
+
+  // 恢复步骤快照
+  function restoreSnapshot(snapshotId) {
+    const snapshot = stepSnapshots.value.find(s => s.id === snapshotId)
+    if (!snapshot) {
+      console.error('快照不存在')
+      return false
+    }
+
+    try {
+      // 恢复所有状态
+      currentStep.value = snapshot.step
+      uploadedImages.value = [] // 需要重新上传图片
+      analysisResult.value = snapshot.analysisResult
+      selectedTemplate.value = snapshot.selectedTemplate
+      detectionResults.value = snapshot.detectionResults
+      projectInfo.value = snapshot.projectInfo
+      userCredits.value = snapshot.userCredits
+      creditsHistory.value = snapshot.creditsHistory
+
+      // 从快照列表中移除已恢复的快照
+      stepSnapshots.value = stepSnapshots.value.filter(s => s.id !== snapshotId)
+
+      return true
+    } catch (error) {
+      console.error('恢复快照失败:', error)
+      return false
+    }
+  }
+
+  // 获取步骤名称
+  function getStepName(stepId) {
+    const stepNames = {
+      1: '图像上传',
+      2: '场景分析',
+      3: '报告模板',
+      4: '识别审查',
+      5: '进阶报告',
+      6: '报告导出'
+    }
+    return stepNames[stepId] || `步骤${stepId}`
+  }
+
+  // 获取用户等级
+  function getUserLevel() {
+    const totalCredits = creditsHistory.value
+      .filter(record => record.type === 'earn')
+      .reduce((sum, record) => sum + record.amount, 0)
+
+    if (totalCredits >= 5000) return 'VIP 5'
+    if (totalCredits >= 3000) return 'VIP 4'
+    if (totalCredits >= 2000) return 'VIP 3'
+    if (totalCredits >= 1000) return 'VIP 2'
+    if (totalCredits >= 500) return 'VIP 1'
+    return '普通用户'
+  }
+
+  // 获取下一等级信息
+  function getNextLevel() {
+    const currentLevel = getUserLevel()
+    const totalCredits = creditsHistory.value
+      .filter(record => record.type === 'earn')
+      .reduce((sum, record) => sum + record.amount, 0)
+
+    const levels = [
+      { name: '普通用户', required: 0, next: 'VIP 1' },
+      { name: 'VIP 1', required: 500, next: 'VIP 2' },
+      { name: 'VIP 2', required: 1000, next: 'VIP 3' },
+      { name: 'VIP 3', required: 2000, next: 'VIP 4' },
+      { name: 'VIP 4', required: 3000, next: 'VIP 5' },
+      { name: 'VIP 5', required: 5000, next: null }
+    ]
+
+    const currentLevelInfo = levels.find(l => l.name === currentLevel)
+    if (!currentLevelInfo || !currentLevelInfo.next) {
+      return null
+    }
+
+    const nextLevelInfo = levels.find(l => l.name === currentLevelInfo.next)
+    const creditsNeeded = nextLevelInfo.required - totalCredits
+    const creditsFromLastLevel = totalCredits - currentLevelInfo.required
+    const creditsPerLevel = nextLevelInfo.required - currentLevelInfo.required
+    const progress = Math.min(100, Math.max(0, (creditsFromLastLevel / creditsPerLevel) * 100))
+
+    return {
+      level: nextLevelInfo.name,
+      creditsNeeded: Math.max(0, creditsNeeded),
+      progress: progress
+    }
+  }
+
+  // 自动保存步骤快照
+  function autoSaveSnapshot() {
+    if (currentStep.value > 1) { // 从第2步开始自动保存
+      createSnapshot()
+    }
+  }
   
   // 验证模板切换是否允许
   function canSwitchTemplate(targetTemplateId) {
@@ -677,7 +868,14 @@ export const useProjectStore = defineStore('project', () => {
     cancelSupplementaryUpload,
     clearCompletedSupplementaryFiles,
     resetSupplementaryData,
-    getUploadedSupplementaryTypes
+    getUploadedSupplementaryTypes,
+    // 个人信息相关方法
+    createSnapshot,
+    restoreSnapshot,
+    getStepName,
+    getUserLevel,
+    getNextLevel,
+    autoSaveSnapshot
   }
 }, {
   // 持久化配置
@@ -708,7 +906,12 @@ export const useProjectStore = defineStore('project', () => {
       // 额外资料上传相关
       'supplementaryFiles',
       'selectedDataSource',
-      'supplementaryDiscount'
+      'supplementaryDiscount',
+      // 个人信息相关
+      'currentUser',
+      'userStats',
+      'stepSnapshots',
+      'showProfileModal'
     ]
   }
 })

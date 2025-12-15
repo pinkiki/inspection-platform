@@ -4,6 +4,7 @@ import { RouterView, useRouter } from 'vue-router'
 import AppHeader from './components/AppHeader.vue'
 import StepProgress from './components/StepProgress.vue'
 import UploadProgressFloat from './components/UploadProgressFloat.vue'
+import ProfileModal from './components/ProfileModal.vue'
 import { useProjectStore } from './stores/project'
 
 const router = useRouter()
@@ -89,6 +90,9 @@ onUnmounted(() => {
     
     <!-- 全局上传进度浮窗 -->
     <UploadProgressFloat />
+
+    <!-- 个人信息模态框 -->
+    <ProfileModal />
     
     <!-- 项目恢复弹窗 -->
     <Teleport to="body">

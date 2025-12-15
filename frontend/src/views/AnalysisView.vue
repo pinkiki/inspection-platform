@@ -288,7 +288,7 @@ const cancelConfirmation = () => {
             <span 
               v-for="algo in scene.algorithms" 
               :key="algo"
-              class="px-2 py-1 bg-brand-primary/20 text-brand-sky text-xs rounded"
+              class="px-2 py-1 bg-brand-primary/20 text-xs rounded"
             >
               {{ algo }}
             </span>

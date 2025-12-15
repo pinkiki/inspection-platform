@@ -35,7 +35,7 @@ const store = useProjectStore()
           </div>
           
           <!-- 新建项目按钮 -->
-          <button 
+          <button
             @click="store.resetProject()"
             class="btn-small"
           >
@@ -43,6 +43,17 @@ const store = useProjectStore()
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             新建项目
+          </button>
+
+          <!-- 个人信息按钮 -->
+          <button
+            @click="store.showProfileModal = true"
+            class="btn-small"
+          >
+            <svg class="w-4 h-4 mr-1.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            个人信息
           </button>
         </div>
       </div>

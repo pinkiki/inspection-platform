@@ -1,8 +1,9 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useProjectStore, CREDIT_PRICES } from '../stores/project'
 import ConfirmDialog from './ConfirmDialog.vue'
+import { Camera } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -115,6 +116,41 @@ const cancelRestart = () => {
   pendingNavigation.value = null
 }
 
+// 手动保存快照
+const manualSaveSnapshot = async () => {
+  try {
+    const snapshot = store.createSnapshot()
+
+    // 调用后端API保存快照
+    const response = await fetch('/api/user/snapshots', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(snapshot)
+    })
+
+    if (response.ok) {
+      console.log('快照保存成功')
+      // 可以在这里添加成功提示
+    } else {
+      console.error('快照保存失败')
+      // 如果后端保存失败，至少本地有保存
+    }
+  } catch (error) {
+    console.error('保存快照时出错:', error)
+    // 即使后端失败，本地也有保存
+  }
+}
+
+// 监听步骤变化，自动保存快照
+watch(currentStepId, (newStep, oldStep) => {
+  if (newStep > oldStep && newStep > 1) {
+    // 只在前进到第2步及之后时自动保存快照
+    store.autoSaveSnapshot()
+  }
+}, { immediate: false })
+
 
 </script>
 
@@ -147,17 +183,31 @@ const cancelRestart = () => {
               <span v-else>{{ step.id }}</span>
             </div>
             
-            <!-- 步骤名称 -->
-            <span 
-              class="step-name"
-              :class="{
-                'active': getStepStatus(step.id) === 'active',
-                'completed': getStepStatus(step.id) === 'completed',
-                'pending': getStepStatus(step.id) === 'pending'
-              }"
-            >
-              {{ step.name }}
-            </span>
+            <!-- 步骤名称和保存按钮 -->
+            <div class="flex items-center gap-2">
+              <span
+                class="step-name"
+                :class="{
+                  'active': getStepStatus(step.id) === 'active',
+                  'completed': getStepStatus(step.id) === 'completed',
+                  'pending': getStepStatus(step.id) === 'pending'
+                }"
+              >
+                {{ step.name }}
+              </span>
+
+              <!-- 保存按钮 -->
+              <button
+                v-if="getStepStatus(step.id) === 'active' || getStepStatus(step.id) === 'completed'"
+                @click.stop="manualSaveSnapshot"
+                class="save-btn"
+                title="保存当前进度"
+              >
+                <el-icon size="14">
+                  <Camera />
+                </el-icon>
+              </button>
+            </div>
           </button>
           
           <!-- 连接线 -->
@@ -258,6 +308,41 @@ const cancelRestart = () => {
 
 .step-line.pending {
   background: var(--line-light);
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid rgba(16,35,117,0.2);
+  color: var(--brand-muted);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.save-btn:hover {
+  background: rgba(16,35,117,0.1);
+  color: var(--brand-primary);
+  border-color: rgba(16,35,117,0.4);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.save-btn:active {
+  transform: scale(1);
+}
+
+.step-name.completed ~ .save-btn:hover {
+  border-color: rgba(111,188,206,0.4);
+  color: var(--good);
+}
+
+.step-name.completed ~ .save-btn:hover {
+  background: rgba(111,188,206,0.1);
 }
 </style>
 
