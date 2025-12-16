@@ -180,7 +180,7 @@ const confirmRestore = async () => {
     // 显示成功消息，包含积分信息
     const creditsDeducted = result.data?.credits_deducted || 20
     const balanceAfter = result.data?.balance_after
-    const message = balanceAfter
+    const message = balanceAfter !== undefined
       ? `快照恢复成功！已扣除${creditsDeducted}积分，当前余额：${balanceAfter}积分`
       : '快照恢复成功！'
 
@@ -190,7 +190,7 @@ const confirmRestore = async () => {
       duration: 5000
     })
 
-    // 关闭对话框
+    // 关闭恢复对话框
     showRestoreDialog.value = false
 
     // 更新store中的积分余额
@@ -201,9 +201,13 @@ const confirmRestore = async () => {
     // 刷新用户信息以获取最新数据
     await fetchUserProfile()
 
+    // 关闭个人信息模态框
+    store.showProfileModal = false
+
     // 跳转到对应步骤
     if (result.data?.stepRoute) {
-      router.push(result.data.stepRoute)
+      await router.push(result.data.stepRoute)
+      ElMessage.info(`已跳转到：${result.data.stepRoute}`)
     }
   } catch (error) {
     console.error('恢复快照失败:', error)

@@ -336,15 +336,11 @@ export const useProjectStore = defineStore('project', () => {
       return false
     }
 
-    const isAdmin = localStorage.getItem('adminMode') === 'true'
     const balanceBefore = userCredits.value
+    const balanceAfter = balanceBefore - amount
 
-    // 管理员模式下不实际扣除积分
-    if (!isAdmin) {
-      userCredits.value -= amount
-    }
-
-    const balanceAfter = userCredits.value
+    // 扣除积分
+    userCredits.value = balanceAfter
 
     // 调用后端API记录积分变化
     try {
@@ -356,7 +352,7 @@ export const useProjectStore = defineStore('project', () => {
         body: JSON.stringify({
           user_id: 1,
           amount: amount,
-          reason: reason + (isAdmin ? ' [管理员模式]' : ''),
+          reason: reason,
           balance_before: balanceBefore,
           balance_after: balanceAfter
         })
@@ -369,8 +365,8 @@ export const useProjectStore = defineStore('project', () => {
     creditsHistory.value.unshift({
       id: Date.now(),
       amount: -amount,
-      reason: reason + (isAdmin ? ' [管理员模式]' : ''),
-      balance: userCredits.value,
+      reason: reason,
+      balance: balanceAfter,
       timestamp: new Date().toISOString()
     })
 
@@ -672,12 +668,18 @@ export const useProjectStore = defineStore('project', () => {
     try {
       // 准备快照数据
       const snapshotData = {
-        // 上传的图片（只需要基本信息，文件路径可能已失效）
+        // 上传的图片（保存完整信息，包括预览URL）
         uploadedImages: uploadedImages.value.map(img => ({
           id: img.id,
           name: img.name,
+          filename: img.filename,
           size: img.size,
-          uploadTime: img.uploadTime
+          width: img.width,
+          height: img.height,
+          uploadTime: img.uploadTime,
+          preview: img.preview,
+          preview_url: img.preview_url,
+          previewUrl: img.previewUrl
         })),
         // 项目信息
         projectId: projectId.value,
@@ -796,14 +798,79 @@ export const useProjectStore = defineStore('project', () => {
       }
 
       const result = await response.json()
-      const { step_index, step_route, snapshot_data } = result.data
+      const { step_index, step_route, snapshot_data, credits_deducted, balance_after } = result.data
 
-      // 恢复数据到store
-      if (snapshot_data.uploadedImages) {
-        uploadedImages.value = snapshot_data.uploadedImages
+      // 恢复项目ID
+      projectId.value = snapshot_data.projectId || null
+
+      // 如果有 projectId，从服务器重新获取图片列表以确保 URL 正确
+      if (projectId.value) {
+        try {
+          const imagesResponse = await fetch(`/api/upload/images/${projectId.value}`, {
+            headers: {
+              'Authorization': 'Bearer mock-token'
+            }
+          })
+
+          if (imagesResponse.ok) {
+            const imagesData = await imagesResponse.json()
+            // 使用服务器返回的图片数据，这些数据包含正确的 preview_url
+            uploadedImages.value = imagesData.images.map(img => ({
+              id: img.id,
+              name: img.original_name || img.filename,
+              filename: img.filename,
+              size: img.file_size,
+              width: img.width,
+              height: img.height,
+              preview: img.preview_url,
+              preview_url: img.preview_url,
+              previewUrl: img.preview_url
+            }))
+          } else {
+            // 如果获取失败，使用快照中的数据并修复 URL
+            console.warn('无法从服务器获取图片列表，使用快照数据')
+            if (snapshot_data.uploadedImages) {
+              uploadedImages.value = snapshot_data.uploadedImages.map(img => {
+                const previewUrl = img.preview_url || img.previewUrl || img.preview || `/uploads/${projectId.value}/${img.filename}`
+                return {
+                  ...img,
+                  preview: previewUrl,
+                  preview_url: previewUrl,
+                  previewUrl: previewUrl
+                }
+              })
+            }
+          }
+        } catch (error) {
+          console.error('获取图片列表失败:', error)
+          // 出错时使用快照中的数据
+          if (snapshot_data.uploadedImages) {
+            uploadedImages.value = snapshot_data.uploadedImages.map(img => {
+              const previewUrl = img.preview_url || img.previewUrl || img.preview || `/uploads/${projectId.value}/${img.filename}`
+              return {
+                ...img,
+                preview: previewUrl,
+                preview_url: previewUrl,
+                previewUrl: previewUrl
+              }
+            })
+          }
+        }
+      } else {
+        // 没有 projectId，只能使用快照数据
+        if (snapshot_data.uploadedImages) {
+          uploadedImages.value = snapshot_data.uploadedImages.map(img => {
+            const previewUrl = img.preview_url || img.previewUrl || img.preview
+            return {
+              ...img,
+              preview: previewUrl,
+              preview_url: previewUrl,
+              previewUrl: previewUrl
+            }
+          })
+        }
       }
 
-      projectId.value = snapshot_data.projectId || null
       projectInfo.value = snapshot_data.projectInfo || {
         name: '',
         location: '',
@@ -815,9 +882,28 @@ export const useProjectStore = defineStore('project', () => {
 
       analysisResult.value = snapshot_data.analysisResult || null
       selectedTemplate.value = snapshot_data.selectedTemplate || null
-      detectionResults.value = snapshot_data.detectionResults || []
+
+      // 恢复检测结果，并确保图片 URL 正确
+      if (snapshot_data.detectionResults && snapshot_data.detectionResults.length > 0) {
+        detectionResults.value = snapshot_data.detectionResults.map(result => {
+          const previewUrl = result.preview_url || result.previewUrl || result.preview || `/uploads/${projectId.value}/${result.filename}`
+          return {
+            ...result,
+            preview: previewUrl,
+            preview_url: previewUrl,
+            previewUrl: previewUrl
+          }
+        })
+      } else {
+        detectionResults.value = []
+      }
+
       currentStep.value = snapshot_data.currentStep || 1
-      userCredits.value = snapshot_data.userCredits || 10000
+
+      // 如果后端返回了新的积分余额，更新它
+      if (balance_after !== undefined) {
+        userCredits.value = balance_after
+      }
 
       // 恢复额外资料信息
       if (snapshot_data.supplementaryFiles) {
@@ -828,10 +914,14 @@ export const useProjectStore = defineStore('project', () => {
       isAdvancedProcessed.value = snapshot_data.isAdvancedProcessed || false
       paidTemplateCredits.value = snapshot_data.paidTemplateCredits || 0
 
-      // 返回路由信息供前端跳转
+      // 返回完整信息供前端使��
       return {
-        stepIndex: step_index,
-        stepRoute: step_route,
+        data: {
+          stepIndex: step_index,
+          stepRoute: step_route,
+          credits_deducted: credits_deducted,
+          balance_after: balance_after
+        },
         success: true
       }
     } catch (error) {
