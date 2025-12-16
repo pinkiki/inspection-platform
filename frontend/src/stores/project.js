@@ -610,7 +610,7 @@ export const useProjectStore = defineStore('project', () => {
 
   // ========== 个人信息相关方法 ==========
 
-  // 创建步骤快照
+  // 创建步骤快照（本地）
   function createSnapshot() {
     const snapshot = {
       id: Date.now(),
@@ -636,7 +636,7 @@ export const useProjectStore = defineStore('project', () => {
     return snapshot
   }
 
-  // 恢复步骤快照
+  // 恢复步骤快照（本地）
   function restoreSnapshot(snapshotId) {
     const snapshot = stepSnapshots.value.find(s => s.id === snapshotId)
     if (!snapshot) {
@@ -662,6 +662,206 @@ export const useProjectStore = defineStore('project', () => {
     } catch (error) {
       console.error('恢复快照失败:', error)
       return false
+    }
+  }
+
+  // ========== 步骤快照API集成 ==========
+
+  // 保存步骤快照到服务器
+  async function saveSnapshotToServer(options = {}) {
+    try {
+      // 准备快照数据
+      const snapshotData = {
+        // 上传的图片（只需要基本信息，文件路径可能已失效）
+        uploadedImages: uploadedImages.value.map(img => ({
+          id: img.id,
+          name: img.name,
+          size: img.size,
+          uploadTime: img.uploadTime
+        })),
+        // 项目信息
+        projectId: projectId.value,
+        projectInfo: projectInfo.value,
+        // 分析结果
+        analysisResult: analysisResult.value,
+        // 选择的模板
+        selectedTemplate: selectedTemplate.value,
+        // 检测结果
+        detectionResults: detectionResults.value,
+        // 当前步骤
+        currentStep: currentStep.value,
+        // 积分信息
+        userCredits: userCredits.value,
+        // 额外资料信息
+        supplementaryFiles: supplementaryFiles.value.map(f => ({
+          id: f.id,
+          type: f.type,
+          name: f.name,
+          size: f.size,
+          status: f.status
+        })),
+        selectedDataSource: selectedDataSource.value,
+        supplementaryDiscount: supplementaryDiscount.value,
+        // 进阶处理状态
+        isAdvancedProcessed: isAdvancedProcessed.value,
+        paidTemplateCredits: paidTemplateCredits.value
+      }
+
+      // 使用传入的步骤信息，如果没有则使用当前路由和store状态
+      const stepIndex = options.stepIndex !== undefined ? options.stepIndex : (currentStep.value - 1)
+      const stepRoute = options.stepRoute || window.location.pathname
+
+      // 调用后端API保存快照
+      const response = await fetch('/api/snapshots/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer mock-token' // 实际应该使用真实的token
+        },
+        body: JSON.stringify({
+          step_index: stepIndex, // 使用传入的或计算的0-based索引
+          step_route: stepRoute,
+          snapshot_data: snapshotData,
+          name: options.name || null,
+          description: options.description || null
+        })
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || '保存快照失败')
+      }
+
+      const result = await response.json()
+      console.log('快照保存成功:', result)
+
+      // 可选：刷新快照列表
+      await loadSnapshotsFromServer()
+
+      return result
+    } catch (error) {
+      console.error('保存快照失败:', error)
+      throw error
+    }
+  }
+
+  // 从服务器加载步骤快照列表
+  async function loadSnapshotsFromServer() {
+    try {
+      const response = await fetch('/api/snapshots/', {
+        headers: {
+          'Authorization': 'Bearer mock-token'
+        }
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || '获取快照列表失败')
+      }
+
+      const snapshots = await response.json()
+
+      // 转换数据格式以适配前端
+      stepSnapshots.value = snapshots.map(snapshot => ({
+        id: snapshot.id,
+        step: snapshot.step_index + 1, // 转换为1-based索引
+        stepName: snapshot.step_name,
+        timestamp: snapshot.created_at,
+        name: snapshot.name,
+        serverId: snapshot.id // 标记这是从服务器加载的
+      }))
+
+      return snapshots
+    } catch (error) {
+      console.error('获取快照列表失败:', error)
+      throw error
+    }
+  }
+
+  // 从服务器恢复步骤快照
+  async function restoreSnapshotFromServer(snapshotId) {
+    try {
+      // 先调用恢复接口获取快照数据
+      const response = await fetch(`/api/snapshots/${snapshotId}/restore`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer mock-token'
+        }
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || '恢复快照失败')
+      }
+
+      const result = await response.json()
+      const { step_index, step_route, snapshot_data } = result.data
+
+      // 恢复数据到store
+      if (snapshot_data.uploadedImages) {
+        uploadedImages.value = snapshot_data.uploadedImages
+      }
+
+      projectId.value = snapshot_data.projectId || null
+      projectInfo.value = snapshot_data.projectInfo || {
+        name: '',
+        location: '',
+        inspectionDate: '',
+        inspector: '',
+        company: '',
+        logo: null
+      }
+
+      analysisResult.value = snapshot_data.analysisResult || null
+      selectedTemplate.value = snapshot_data.selectedTemplate || null
+      detectionResults.value = snapshot_data.detectionResults || []
+      currentStep.value = snapshot_data.currentStep || 1
+      userCredits.value = snapshot_data.userCredits || 10000
+
+      // 恢复额外资料信息
+      if (snapshot_data.supplementaryFiles) {
+        supplementaryFiles.value = snapshot_data.supplementaryFiles
+      }
+      selectedDataSource.value = snapshot_data.selectedDataSource || null
+      supplementaryDiscount.value = snapshot_data.supplementaryDiscount || 0
+      isAdvancedProcessed.value = snapshot_data.isAdvancedProcessed || false
+      paidTemplateCredits.value = snapshot_data.paidTemplateCredits || 0
+
+      // 返回路由信息供前端跳转
+      return {
+        stepIndex: step_index,
+        stepRoute: step_route,
+        success: true
+      }
+    } catch (error) {
+      console.error('恢复快照失败:', error)
+      throw error
+    }
+  }
+
+  // 删除服务器上的步骤快照
+  async function deleteSnapshotFromServer(snapshotId) {
+    try {
+      const response = await fetch(`/api/snapshots/${snapshotId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer mock-token'
+        }
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || '删除快照失败')
+      }
+
+      // 从本地列表中移除
+      stepSnapshots.value = stepSnapshots.value.filter(s => s.id !== snapshotId)
+
+      return true
+    } catch (error) {
+      console.error('删除快照失败:', error)
+      throw error
     }
   }
 
@@ -875,7 +1075,12 @@ export const useProjectStore = defineStore('project', () => {
     getStepName,
     getUserLevel,
     getNextLevel,
-    autoSaveSnapshot
+    autoSaveSnapshot,
+    // 服务器快照相关方法
+    saveSnapshotToServer,
+    loadSnapshotsFromServer,
+    restoreSnapshotFromServer,
+    deleteSnapshotFromServer
   }
 }, {
   // 持久化配置

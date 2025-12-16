@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 import sqlite3
 import os
 from pydantic import BaseModel
+from models import STEP_NAMES
 
 router = APIRouter(prefix="/api/user", tags=["user"])
 
@@ -139,17 +140,22 @@ async def get_user_profile(user_id: int = 1):
 
     # 获取步骤快照
     cursor.execute('''
-        SELECT * FROM step_snapshots
+        SELECT id, step_index, step_route, name, created_at
+        FROM step_snapshots
         WHERE user_id = ?
-        ORDER BY timestamp DESC
+        ORDER BY created_at DESC
         LIMIT 10
     ''', (user_id,))
 
     snapshot_rows = cursor.fetchall()
     snapshots = [
         {
-            "id": row[0], "user_id": row[1], "step": row[2], "step_name": row[3],
-            "timestamp": row[4], "image_count": row[5], "template_name": row[6], "data": eval(row[7]) if row[7] else {}
+            "id": row[0],
+            "step_index": row[1],
+            "step_route": row[2],
+            "step_name": STEP_NAMES.get(row[1], f"步骤 {row[1] + 1}"),
+            "timestamp": row[4],
+            "name": row[3] if row[3] else f"{STEP_NAMES.get(row[1], f'步骤 {row[1] + 1}')} 快照"
         } for row in snapshot_rows
     ]
 
@@ -207,7 +213,7 @@ async def get_credit_history(
             "id": row[0],
             "user_id": row[1],
             "type": row[2],
-            "amount": row[3],
+            "amount": abs(row[3]),  # 统一返回正数，通过type字段区分消费和获得
             "reason": row[4],
             "balance_before": row[5],
             "balance_after": row[6],

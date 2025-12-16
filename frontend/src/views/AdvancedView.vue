@@ -260,6 +260,9 @@ const processStages = () => {
 }
 
 onMounted(async () => {
+  // 设置当前步骤为步骤5（进阶报告）
+  store.setCurrentStep(5)
+
   if (!store.selectedTemplate) {
     router.push('/template')
     return

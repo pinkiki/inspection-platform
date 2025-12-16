@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useProjectStore, CREDIT_PRICES } from '../stores/project'
 import ConfirmDialog from './ConfirmDialog.vue'
 import { Camera } from '@element-plus/icons-vue'
@@ -117,29 +118,31 @@ const cancelRestart = () => {
 }
 
 // 手动保存快照
-const manualSaveSnapshot = async () => {
+const manualSaveSnapshot = async (stepId) => {
   try {
-    const snapshot = store.createSnapshot()
+    // 获取当前路由对应的步骤信息
+    const step = steps.find(s => s.id === stepId)
+    if (!step) {
+      ElMessage.error('无法确定当前步骤')
+      return
+    }
 
-    // 调用后端API保存快照
-    const response = await fetch('/api/user/snapshots', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(snapshot)
+    // 使用当前路由的步骤ID和名称
+    const stepName = step.name
+    const stepIndex = stepId - 1 // 转换为 0-based
+
+    // 使用新的API方法保存快照
+    await store.saveSnapshotToServer({
+      name: `步骤${stepId}：${stepName} 快速保存`,
+      description: `在步骤${stepName}手动保存的进度`,
+      stepIndex: stepIndex,
+      stepRoute: step.path
     })
 
-    if (response.ok) {
-      console.log('快照保存成功')
-      // 可以在这里添加成功提示
-    } else {
-      console.error('快照保存失败')
-      // 如果后端保存失败，至少本地有保存
-    }
+    ElMessage.success(`进度保存成功！快照：步骤${stepId}：${stepName}`)
   } catch (error) {
-    console.error('保存快照时出错:', error)
-    // 即使后端失败，本地也有保存
+    console.error('保存快照失败:', error)
+    ElMessage.error(error.message || '保存进度失败，请稍后重试')
   }
 }
 
@@ -196,10 +199,10 @@ watch(currentStepId, (newStep, oldStep) => {
                 {{ step.name }}
               </span>
 
-              <!-- 保存按钮 -->
+              <!-- 保存按钮 - 只在当前激活步骤显示 -->
               <button
-                v-if="getStepStatus(step.id) === 'active' || getStepStatus(step.id) === 'completed'"
-                @click.stop="manualSaveSnapshot"
+                v-if="getStepStatus(step.id) === 'active'"
+                @click.stop="manualSaveSnapshot(step.id)"
                 class="save-btn"
                 title="保存当前进度"
               >

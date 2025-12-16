@@ -125,6 +125,9 @@ const aiInfo = computed(() => {
 })
 
 onMounted(() => {
+  // 设置当前步骤为步骤6（报告导出）
+  store.setCurrentStep(6)
+
   if (!store.detectionResults.length) {
     router.push('/review')
   }

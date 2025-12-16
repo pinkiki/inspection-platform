@@ -1,12 +1,14 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useProjectStore, CREDIT_PRICES } from '../stores/project'
 import ConfirmDialog from './ConfirmDialog.vue'
+import SnapshotList from './SnapshotList.vue'
 
+const router = useRouter()
 const store = useProjectStore()
 
-const showRestoreConfirm = ref(false)
-const selectedSnapshot = ref(null)
 const loading = ref(false)
 
 // 用户信息
@@ -31,6 +33,12 @@ const creditInfo = ref({
 
 // 步骤快照
 const stepSnapshots = ref([])
+
+// 恢复快照对话框
+const showRestoreDialog = ref(false)
+const selectedSnapshot = ref(null)
+const restoring = ref(false)
+
 
 // 积分明细分页
 const creditPagination = ref({
@@ -90,10 +98,12 @@ const fetchUserProfile = async () => {
         level: data.level,
         nextLevel: data.next_level_info
       }
-      stepSnapshots.value = data.step_snapshots || []
 
       // 更新store中的当前积分
       store.userCredits = data.current_credits
+
+      // 设置步骤快照
+      stepSnapshots.value = data.step_snapshots || []
 
       // 获取积分历史记录
       await fetchCreditHistory(1)
@@ -121,61 +131,103 @@ const fetchUserProfile = async () => {
       level: store.getUserLevel(),
       nextLevel: store.getNextLevel()
     }
-    stepSnapshots.value = store.stepSnapshots || []
   } finally {
     loading.value = false
   }
 }
 
-// 恢复快照
-const restoreSnapshot = async (snapshot) => {
-  selectedSnapshot.value = snapshot
-  showRestoreConfirm.value = true
-}
-
-// 确认恢复
-const confirmRestore = async () => {
-  if (!selectedSnapshot.value) return
-
-  try {
-    // 首先扣除积分
-    const success = store.deductCredits(20, '恢复步骤快照')
-    if (!success) {
-      return
-    }
-
-    // 调用后端API恢复快照
-    const response = await fetch(`/api/user/snapshots/${selectedSnapshot.value.id}/restore`, {
-      method: 'POST'
-    })
-
-    if (response.ok) {
-      const result = await response.json()
-      store.restoreSnapshot(selectedSnapshot.value.id)
-      showRestoreConfirm.value = false
-      selectedSnapshot.value = null
-      await fetchUserProfile() // 刷新用户信息
-    } else {
-      // 如果失败，退回积分
-      store.addCredits(20, '快照恢复失败退款')
-      console.error('恢复快照失败')
-    }
-  } catch (error) {
-    console.error('恢复快照失败:', error)
-    // 如果失败，退回积分
-    store.addCredits(20, '快照恢复失败退款')
-  }
-}
-
-// 取消恢复
-const cancelRestore = () => {
-  showRestoreConfirm.value = false
-  selectedSnapshot.value = null
-}
 
 // 关闭
 const close = () => {
   store.showProfileModal = false
+}
+
+// 处理快照删除
+const handleSnapshotDeleted = (snapshotId) => {
+  // 从本地快照列表中移除
+  stepSnapshots.value = stepSnapshots.value.filter(s => s.id !== snapshotId)
+}
+
+// 处理快照刷新
+const handleSnapshotRefresh = async () => {
+  await fetchUserProfile()
+}
+
+// 处理快照恢复请求 - 打开恢复确认对话框
+const handleSnapshotRestoreRequest = (snapshot) => {
+  selectedSnapshot.value = snapshot
+  showRestoreDialog.value = true
+}
+
+// 确认恢复快照
+const confirmRestore = async () => {
+  if (!selectedSnapshot.value) return
+
+  // 检查积分是否足够
+  if (store.userCredits < 20) {
+    ElMessage.error('积分不足，恢复快照需要20积分')
+    return
+  }
+
+  restoring.value = true
+
+  try {
+    // 调用store方法恢复快照
+    const result = await store.restoreSnapshotFromServer(
+      selectedSnapshot.value.id
+    )
+
+    // 显示成功消息，包含积分信息
+    const creditsDeducted = result.data?.credits_deducted || 20
+    const balanceAfter = result.data?.balance_after
+    const message = balanceAfter
+      ? `快照恢复成功！已扣除${creditsDeducted}积分，当前余额：${balanceAfter}积分`
+      : '快照恢复成功！'
+
+    ElMessage({
+      message,
+      type: 'success',
+      duration: 5000
+    })
+
+    // 关闭对话框
+    showRestoreDialog.value = false
+
+    // 更新store中的积分余额
+    if (balanceAfter !== undefined) {
+      store.userCredits = balanceAfter
+    }
+
+    // 刷新用户信息以获取最新数据
+    await fetchUserProfile()
+
+    // 跳转到对应步骤
+    if (result.data?.stepRoute) {
+      router.push(result.data.stepRoute)
+    }
+  } catch (error) {
+    console.error('恢复快照失败:', error)
+
+    // 处理积分不足的错误
+    if (error.message.includes('积分不足') || error.message.includes('Payment Required')) {
+      ElMessage.error('积分不足，恢复快照需要20积分')
+    } else {
+      ElMessage.error(error.message || '恢复快照失败')
+    }
+  } finally {
+    restoring.value = false
+  }
+}
+
+// 处理快照恢复（保留兼容性）
+const handleSnapshotRestored = async (data) => {
+  // 更新store中的积分余额
+  if (data.balanceAfter !== undefined) {
+    store.userCredits = data.balanceAfter
+  }
+
+  // 刷新用户信息以获取最新的积分历史
+  await fetchUserProfile()
 }
 
 // 分页控制函数
@@ -266,7 +318,8 @@ const formatTime = (timestamp) => {
 // 格式化积分使用记录
 const formatCreditRecord = (record) => {
   const typeText = record.type === 'spend' ? '消费' : '获得'
-  const amountText = record.type === 'spend' ? `-${record.amount}` : `+${record.amount}`
+   const amountText = record.type === 'spend' ? 
+    - `-${record.amount}` : `+${record.amount}`
   return { typeText, amountText }
 }
 </script>
@@ -450,7 +503,7 @@ const formatCreditRecord = (record) => {
                         class="text-sm font-bold font-mono"
                         :class="record.type === 'earn' ? 'text-accent-success' : 'text-accent-danger'"
                       >
-                        {{ record.type === 'earn' ? '+' : '-' }}{{ record.amount }}
+                         {{ record.type === 'earn' ? '+' : '-' }}{{ record.amount }}
                       </span>
                     </td>
 
@@ -495,65 +548,88 @@ const formatCreditRecord = (record) => {
 
           <!-- 步骤快照 -->
           <div class="glass-card p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold text-text-primary">步骤快照</h3>
-              <div class="text-sm text-text-secondary">
-                <svg class="w-4 h-4 inline mr-1 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                最多保留10个快照，恢复需20积分
-              </div>
-            </div>
-
-            <div v-if="stepSnapshots.length === 0" class="text-center py-8 text-text-secondary">
-              暂无步骤快照
-            </div>
-
-            <div v-else class="space-y-3">
-              <div
-                v-for="snapshot in stepSnapshots"
-                :key="snapshot.id"
-                class="kv-row cursor-pointer hover:bg-base-elevated transition-colors"
-                @click="restoreSnapshot(snapshot)"
-              >
-                <div class="flex-1">
-                  <div class="font-medium text-text-primary">
-                    步骤 {{ snapshot.step }} · {{ snapshot.step_name }}
-                  </div>
-                  <div class="text-xs text-text-secondary">
-                    {{ formatTime(snapshot.timestamp) }}
-                  </div>
-                  <div class="text-xs text-text-secondary">
-                    {{ snapshot.image_count }} 张图片 · {{ snapshot.template_name }}
-                  </div>
-                </div>
-                <button class="btn-small">
-                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  恢复
-                </button>
-              </div>
-            </div>
+            <SnapshotList
+              :snapshot-list="stepSnapshots"
+              @deleted="handleSnapshotDeleted"
+              @refresh="handleSnapshotRefresh"
+              @restored="handleSnapshotRestored"
+              @restore-request="handleSnapshotRestoreRequest"
+            />
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 恢复确认对话框 -->
-  <ConfirmDialog
-    :show="showRestoreConfirm"
-    title="恢复步骤快照"
-    :message="`确定要恢复到步骤 ${selectedSnapshot?.step} (${selectedSnapshot?.stepName}) 吗？&#10;&#10;此操作将：&#10;• 消耗 20 积分&#10;• 恢复到当时的进度状态&#10;• 当前未保存的进度将丢失`"
-    :credits-cost="20"
-    confirm-text="确认恢复"
-    cancel-text="取消"
-    type="warning"
-    @confirm="confirmRestore"
-    @cancel="cancelRestore"
-    @close="cancelRestore"
-  />
+    <!-- 恢复快照确认对话框 -->
+    <el-dialog
+      v-model="showRestoreDialog"
+      title="恢复步骤快照"
+      width="450px"
+      :close-on-click-modal="false"
+      :append-to-body="true"
+      class="restore-snapshot-dialog"
+    >
+      <div class="space-y-4">
+        <!-- 警告信息 -->
+        <el-alert
+          type="warning"
+          :closable="false"
+          show-icon
+        >
+          <div class="space-y-1">
+            <p>⚠️ 恢复快照将替换当前的所有进度，此操作不可撤销</p>
+            <p class="font-semibold text-orange-600">💰 恢复快照需要消耗 20 积分</p>
+          </div>
+        </el-alert>
+
+        <!-- 积分显示 -->
+        <div class="bg-orange-50 border border-orange-200 rounded-lg p-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-600">当前积分余额：</span>
+            <span class="text-lg font-bold text-orange-600">{{ store.userCredits }} 积分</span>
+          </div>
+        </div>
+
+        <!-- 快照信息 -->
+        <div v-if="selectedSnapshot" class="bg-gray-50 rounded-lg p-4">
+          <h4 class="font-semibold mb-3">快照信息</h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">快照名称：</span>
+              <span class="font-medium">{{ selectedSnapshot.name || `步骤${selectedSnapshot.step_index + 1}：${selectedSnapshot.stepName}` }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">保存步骤：</span>
+              <span class="font-medium">{{ selectedSnapshot.stepName }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">保存时间：</span>
+              <span class="font-medium">{{ formatTime(selectedSnapshot.timestamp) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 确认提示 -->
+        <p class="text-sm text-gray-700 bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <strong>请确认：</strong>您将要花费 20 积分恢复此快照，恢复后将无法撤销此操作。
+        </p>
+      </div>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showRestoreDialog = false">取消</el-button>
+          <el-button
+            type="primary"
+            @click="confirmRestore"
+            :loading="restoring"
+            :disabled="store.userCredits < 20"
+          >
+            确认恢复 (消耗20积分)
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <style scoped>
@@ -609,5 +685,20 @@ const formatCreditRecord = (record) => {
   background: var(--brand-primary);
   color: white;
   border-color: var(--brand-primary);
+}
+
+/* 恢复快照对话框样式 */
+.restore-snapshot-dialog :deep(.el-dialog) {
+  border-radius: 12px;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+:deep(.el-alert__content) {
+  font-size: 14px;
 }
 </style>

@@ -7,6 +7,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 
 from routes import upload, analysis, report, export, credits, advanced, supplementary, user_db as user
+from api import step_snapshots
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -40,6 +41,7 @@ app.include_router(credits.router, tags=["积分"])
 app.include_router(advanced.router, tags=["进阶处理"])
 app.include_router(supplementary.router, tags=["额外资料"])
 app.include_router(user.router, tags=["用户"])
+app.include_router(step_snapshots.router)
 
 
 @app.get("/")

@@ -80,7 +80,59 @@ async def init_db():
                 FOREIGN KEY (detection_id) REFERENCES detection_results(id)
             )
         """)
-        
+
+        # 用户表
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE,
+                email TEXT UNIQUE,
+                password_hash TEXT,
+                credits INTEGER DEFAULT 100,
+                level INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # 积��历史表
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS credit_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER,
+                amount INTEGER,
+                type TEXT,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+
+        # 步骤快照表
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS step_snapshots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                step_index INTEGER NOT NULL CHECK(step_index >= 0 AND step_index <= 5),
+                step_route TEXT NOT NULL,
+                snapshot_data TEXT NOT NULL,
+                name TEXT,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
+
+        # 创建索引
+        await db.execute("""
+            CREATE INDEX IF NOT EXISTS idx_step_snapshots_user_id ON step_snapshots(user_id)
+        """)
+
+        await db.execute("""
+            CREATE INDEX IF NOT EXISTS idx_step_snapshots_created_at ON step_snapshots(created_at DESC)
+        """)
+
         await db.commit()
 
 

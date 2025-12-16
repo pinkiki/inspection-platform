@@ -53,9 +53,9 @@ const closeHistory = () => {
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
           d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
-      <span v-if="isAdminMode" class="font-bold text-accent-warning">∞</span>
-      <span v-else class="font-mono font-bold text-text-primary">{{ store.userCredits }}</span>
-      <span class="text-sm text-text-secondary">{{ isAdminMode ? '管理员' : '积分' }}</span>
+      <!-- <span v-if="isAdminMode" class="font-bold text-accent-warning">∞</span> -->
+      <span class="font-mono font-bold text-text-primary">{{ store.userCredits }}</span>
+      <!-- <span class="text-sm text-text-secondary">{{ isAdminMode ? '管理员' : '积分' }}</span> -->
       <svg
         class="w-4 h-4 text-text-secondary transition-transform"
         :class="{ 'rotate-180': showHistory }"
@@ -95,10 +95,10 @@ const closeHistory = () => {
           <!-- 当前余额 -->
           <div class="glass-card p-4 mb-4 text-center">
             <div class="text-sm text-text-secondary mb-1">当前余额</div>
-            <div v-if="isAdminMode" class="text-3xl font-bold text-accent-warning">
-              ∞
-            </div>
-            <div v-else class="text-3xl font-bold text-brand-sky font-mono">{{ store.userCredits }}</div>
+            <!-- <div v-if="isAdminMode" class="text-3xl font-bold text-accent-warning"> -->
+              <!-- ∞ -->
+            <!-- </div> -->
+            <div  class="text-3xl font-bold text-brand-sky font-mono">{{ store.userCredits }}</div>
             <div class="text-xs text-text-secondary mt-1">{{ isAdminMode ? '管理员模式' : '积分' }}</div>
           </div>
           
