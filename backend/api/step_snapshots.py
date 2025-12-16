@@ -56,6 +56,16 @@ async def create_snapshot(
 
         # 插入数据库
         async with get_db() as db:
+            # 先删除该用户在相同步骤的旧快照（保留离当前时间最近的）
+            await db.execute(
+                """
+                DELETE FROM step_snapshots
+                WHERE user_id = ? AND step_index = ?
+                """,
+                (user_id, snapshot_data.step_index)
+            )
+
+            # 插入新快照
             cursor = await db.execute(
                 """
                 INSERT INTO step_snapshots

@@ -1,7 +1,18 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import { useProjectStore } from '../stores/project'
 
+const router = useRouter()
 const store = useProjectStore()
+
+// 新建项目
+const handleNewProject = () => {
+  // 重置项目数据
+  store.resetProject()
+
+  // 跳转到第一步（上传页面）
+  router.push('/')
+}
 </script>
 
 <template>
@@ -36,7 +47,7 @@ const store = useProjectStore()
           
           <!-- 新建项目按钮 -->
           <button
-            @click="store.resetProject()"
+            @click="handleNewProject"
             class="btn-small"
           >
             <svg class="w-4 h-4 mr-1.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
